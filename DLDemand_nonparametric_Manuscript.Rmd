@@ -1,0 +1,293 @@
+---
+title: "Demand Paper"
+author: "Matthew Aaron Looney"
+date: "08/22/2017"
+output:
+  pdf_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+    toc_depth: 4
+  html_document:
+    toc: yes
+    toc_depth: '4'
+subtitle: 
+header-includes:
+- \usepackage{graphicx}
+- \usepackage{rotating}
+- \usepackage{longtable}
+- \usepackage{amssymb,amsmath}
+- \usepackage{dcolumn}
+---
+
+```{r House Keeping, echo=FALSE, message=FALSE}
+
+rm(list=ls())
+
+# randNum <- round(runif(1, 1, 1e8)) # !!! RUN ONLY ONCE TO GENERATE RN for seed !!!
+# randNum
+set.seed(38532842) # all sequential simulations will start from this seed
+
+library(readxl)
+library(stargazer)
+library(systemfit)
+library(np)
+library(micEconAids)
+
+options(digits=5)
+
+setwd("~/Google Drive/digitalLibrary/*AAEC 6310 Demand and Price Analysis/demandPaper")
+
+source("~/Google Drive/digitalLibrary/*AAEC 6310 Demand and Price Analysis/demandLab1/calculate_pValue.R")
+source("~/Google Drive/digitalLibrary/*AAEC 6310 Demand and Price Analysis/demandLab1/calculate_tValues.R")
+
+```
+
+```{r Import & data manip, echo=FALSE, message=FALSE}
+
+Dta1 <- read_excel("~/Google Drive/digitalLibrary/*AAEC 6310 Demand and Price Analysis/DemandLab1/Labdata.xls")
+Dta1 <- as.data.frame(Dta1)
+
+p1q1= Dta1$p1* Dta1$q1
+p2q2= Dta1$p2* Dta1$q2
+p3q3= Dta1$p3* Dta1$q3
+p4q4= Dta1$p4* Dta1$q4
+p5q5= Dta1$p5* Dta1$q5
+p6q6= Dta1$p6* Dta1$q6
+
+X= data.frame(X=Dta1$p1* Dta1$q1+ Dta1$p2* Dta1$q2+ Dta1$p3* Dta1$q3+ Dta1$p4* Dta1$q4+ Dta1$p5* Dta1$q5+ Dta1$p6* Dta1$q6)
+
+lnX <- log(X)
+colnames(lnX) <- "lnX"
+
+w1= p1q1/X
+colnames(w1) <- "w1"
+w2= p2q2/X
+colnames(w2) <- "w2"
+w3= p3q3/X
+colnames(w3) <- "w3"
+w4= p4q4/X
+colnames(w4) <- "w4"
+w5= p5q5/X
+colnames(w5) <- "w5"
+w6= p6q6/X
+colnames(w6) <- "w6"
+
+lnp1_catfish=log(Dta1$p1)
+lnp2_crawfish=log(Dta1$p2)
+lnp3_clams=log(Dta1$p3)
+lnp4_shrimp=log(Dta1$p4)
+lnp5_tilapia=log(Dta1$p5)
+lnp6_salmon=log(Dta1$p6)
+
+lnq1_catfish=log(Dta1$q1)
+lnq2_crawfish=log(Dta1$q2)
+lnq3_clams=log(Dta1$q3)
+lnq4_shrimp=log(Dta1$q4)
+lnq5_tilapia=log(Dta1$q5)
+lnq6_salmon=log(Dta1$q6)
+
+Dta1 <- cbind(Dta1, p1q1, p2q2, p3q3, p4q4, p5q5, p6q6, X, lnX, w1, w2, w3, w4, w5, w6, lnp1_catfish, lnp2_crawfish, lnp3_clams, lnp4_shrimp, lnp5_tilapia, lnp6_salmon, lnq1_catfish, lnq2_crawfish, lnq3_clams, lnq4_shrimp, lnq5_tilapia, lnq6_salmon)
+
+S=w1*lnp1_catfish+w2*lnp2_crawfish+w3*lnp3_clams+w4*lnp4_shrimp+w5*lnp5_tilapia+w6*lnp6_salmon; #Stone Index
+
+Dta_sub <- Dta1[, c(21, 28:39)]
+
+```
+
+```{r Single Equation Model Estimation using Log-Log Functional Form, echo=FALSE, message=FALSE}
+
+# Single Equation Model Estimation using Log-Log Functional Form
+# Estimate Marshallian elasticities - unrestricted
+
+marshallian_1.lm <- lm(lnq1_catfish ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
+marshallian_2.lm <- lm(lnq2_crawfish ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
+marshallian_3.lm <- lm(lnq3_clams ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
+marshallian_4.lm <- lm(lnq4_shrimp ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
+marshallian_5.lm <- lm(lnq5_tilapia ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
+marshallian_6.lm <- lm(lnq6_salmon ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
+```
+
+```{r, echo=FALSE, message=FALSE}
+
+dld_1_formula <- formula(lnq1_catfish ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX)
+
+dld_2_formula <- formula(lnq2_crawfish ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX)
+
+dld_3_formula <- formula(lnq3_clams ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX)
+
+dld_4_formula <- formula(lnq4_shrimp ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX)
+
+dld_5_formula <- formula(lnq5_tilapia ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX)
+
+dld_6_formula <- formula(lnq6_salmon ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX)
+
+# summary(marshallian_1.lm)
+# 
+# Rmat1 <- matrix(0, nrow = 1, ncol = 8)
+# Rmat1[1,2:8] <- 1
+# qvec <- c(0)
+# test_1 <- systemfit(dld_1_formula, data=Dta_sub, method="OLS", restrict.matrix = Rmat1, restrict.rhs = qvec)
+
+#Dta_scaled <- data.frame(X=Dta1$X/mean(Dta1$X), q1=Dta1$q1/mean(Dta1$q1), p1=Dta1$p1/mean(Dta1$p1), p2=Dta1$p2/mean(Dta1$p2), p3=Dta1$p3/mean(Dta1$p3), p4=Dta1$p4/mean(Dta1$p4), p5=Dta1$p5/mean(Dta1$p5), p6=Dta1$p6/mean(Dta1$p6))
+
+xdat <- Dta_sub[,1:7]
+ydat_1 <- Dta_sub$lnq1_catfish
+ydat_2 <- Dta_sub$lnq2_crawfish
+ydat_3 <- Dta_sub$lnq3_clams
+ydat_4 <- Dta_sub$lnq4_shrimp
+ydat_5 <- Dta_sub$lnq5_tilapia
+ydat_6 <- Dta_sub$lnq6_salmon
+
+dld_1 <- lm(lnq1_catfish ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta_sub, x=TRUE, y=TRUE)
+
+dld_2 <- lm(lnq2_crawfish ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta_sub, x=TRUE, y=TRUE)
+
+dld_3 <- lm(lnq3_clams ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta_sub, x=TRUE, y=TRUE)
+
+dld_4 <- lm(lnq4_shrimp ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta_sub, x=TRUE, y=TRUE)
+
+dld_5 <- lm(lnq5_tilapia ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta_sub, x=TRUE, y=TRUE)
+
+dld_6 <- lm(lnq6_salmon ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta_sub, x=TRUE, y=TRUE)
+
+### Consistent Model Specification Test
+cmsTest_1 <- npcmstest(model=dld_1, xdat=xdat, ydat = ydat_1)
+cmsTest_2 <-npcmstest(model=dld_2, xdat=xdat, ydat = ydat_2)
+cmsTest_3 <-npcmstest(model=dld_3, xdat=xdat, ydat = ydat_3)
+cmsTest_4 <-npcmstest(model=dld_4, xdat=xdat, ydat = ydat_4)
+cmsTest_5 <-npcmstest(model=dld_5, xdat=xdat, ydat = ydat_5)
+cmsTest_6 <-npcmstest(model=dld_6, xdat=xdat, ydat = ydat_6)
+
+#non-Parametric regression
+bw.all_1 <- npregbw(formula = dld_1_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub)
+bw.all_2 <- npregbw(formula = dld_2_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub)
+bw.all_3 <- npregbw(formula = dld_3_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub)
+bw.all_4 <- npregbw(formula = dld_4_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub)
+bw.all_5 <- npregbw(formula = dld_5_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub)
+bw.all_6 <- npregbw(formula = dld_6_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub)
+
+#bw.all <- npplreg(lnq1_catfish ~ lnX | lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon, data = Dta_sub)
+
+summary(bw.all_1)
+summary(bw.all_2)
+summary(bw.all_3)
+summary(bw.all_4)
+summary(bw.all_5)
+summary(bw.all_6)
+
+model_1.np <- npreg(bws = bw.all_1, gradients = TRUE, residuals = TRUE)
+model_2.np <- npreg(bws = bw.all_2, gradients = TRUE, residuals = TRUE)
+model_3.np <- npreg(bws = bw.all_3, gradients = TRUE, residuals = TRUE)
+model_4.np <- npreg(bws = bw.all_4, gradients = TRUE, residuals = TRUE)
+model_5.np <- npreg(bws = bw.all_5, gradients = TRUE, residuals = TRUE)
+model_6.np <- npreg(bws = bw.all_6, gradients = TRUE, residuals = TRUE)
+
+summary(model_1.np)
+summary(model_2.np)
+summary(model_3.np)
+summary(model_4.np)
+summary(model_5.np)
+summary(model_6.np)
+
+# Kernel Regression Significance Test
+KRS_test_1 <- npsigtest(model_1.np)
+KRS_test_2 <- npsigtest(model_2.np)
+KRS_test_3 <- npsigtest(model_3.np)
+KRS_test_4 <- npsigtest(model_4.np)
+KRS_test_5 <- npsigtest(model_5.np)
+KRS_test_6 <- npsigtest(model_6.np)
+
+
+e1x_np <- list()
+e1x_np$e11_np <- mean(model_1.np$grad[,1])
+e1x_np$e12_np <- mean(model_1.np$grad[,2])
+e1x_np$e13_np <- mean(model_1.np$grad[,3])
+e1x_np$e14_np <- mean(model_1.np$grad[,4])
+e1x_np$e15_np <- mean(model_1.np$grad[,5])
+e1x_np$e16_np <- mean(model_1.np$grad[,6])
+e1x_np$eta1_np <- mean(model_1.np$grad[,7])
+plot(density(model_1.np$grad[,1]))
+
+e2x_np <- list()
+e2x_np$e21_np <- mean(model_2.np$grad[,1])
+e2x_np$e22_np <- mean(model_2.np$grad[,2])
+e2x_np$e23_np <- mean(model_2.np$grad[,3])
+e2x_np$e24_np <- mean(model_2.np$grad[,4])
+e2x_np$e25_np <- mean(model_2.np$grad[,5])
+e2x_np$e26_np <- mean(model_2.np$grad[,6])
+e2x_np$eta2_np <- mean(model_2.np$grad[,7])
+plot(density(model_2.np$grad[,2]))
+
+e3x_np <- list()
+e3x_np$e31_np <- mean(model_3.np$grad[,1])
+e3x_np$e32_np <- mean(model_3.np$grad[,2])
+e3x_np$e33_np <- mean(model_3.np$grad[,3])
+e3x_np$e34_np <- mean(model_3.np$grad[,4])
+e3x_np$e35_np <- mean(model_3.np$grad[,5])
+e3x_np$e36_np <- mean(model_3.np$grad[,6])
+e3x_np$eta3_np <- mean(model_3.np$grad[,7])
+plot(density(model_3.np$grad[,3]))
+
+e4x_np <- list()
+e4x_np$e41_np <- mean(model_4.np$grad[,1])
+e4x_np$e42_np <- mean(model_4.np$grad[,2])
+e4x_np$e43_np <- mean(model_4.np$grad[,3])
+e4x_np$e44_np <- mean(model_4.np$grad[,4])
+e4x_np$e45_np <- mean(model_4.np$grad[,5])
+e4x_np$e46_np <- mean(model_4.np$grad[,6])
+e4x_np$eta4_np <- mean(model_4.np$grad[,7])
+plot(density(model_4.np$grad[,4]))
+
+e5x_np <- list()
+e5x_np$e51_np <- mean(model_5.np$grad[,1])
+e5x_np$e52_np <- mean(model_5.np$grad[,2])
+e5x_np$e53_np <- mean(model_5.np$grad[,3])
+e5x_np$e54_np <- mean(model_5.np$grad[,4])
+e5x_np$e55_np <- mean(model_5.np$grad[,5])
+e5x_np$e56_np <- mean(model_5.np$grad[,6])
+e5x_np$eta5_np <- mean(model_5.np$grad[,7])
+plot(density(model_5.np$grad[,5]))
+
+e6x_np <- list()
+e6x_np$e61_np <- mean(model_6.np$grad[,1])
+e6x_np$e62_np <- mean(model_6.np$grad[,2])
+e6x_np$e63_np <- mean(model_6.np$grad[,3])
+e6x_np$e64_np <- mean(model_6.np$grad[,4])
+e6x_np$e65_np <- mean(model_6.np$grad[,5])
+e6x_np$e66_np <- mean(model_6.np$grad[,6])
+e6x_np$eta6_np <- mean(model_6.np$grad[,7])
+plot(density(model_6.np$grad[,6]))
+
+exx_np <- matrix(unlist(c(e1x_np, e2x_np, e3x_np, e4x_np, e5x_np, e6x_np)), nrow = 6, byrow = TRUE)
+
+
+###     ###
+# weights <- c( lnp1_catfish=mean(Dta_sub$lnp1_catfish), lnp2_crawfish=mean(Dta_sub$lnp2_crawfish), lnp3_clams=mean(Dta_sub$lnp3_clams), lnp4_shrimp=mean(Dta_sub$lnp4_shrimp), lnp5_tilapia=mean(Dta_sub$lnp5_tilapia), lnp6_salmon=mean(Dta_sub$lnp6_salmon))
+# 
+# weights <- weights/sum(weights)
+# 
+# est1_np <- npregHom(yName = "lnq1_catfish", xNames = c("lnp1_catfish", "lnp2_crawfish", "lnp3_clams", "lnp4_shrimp", "lnp5_tilapia", "lnp6_salmon", "lnX"), data=Dta_sub, homWeights = weights)
+# 
+# est2_np <- npregHom(yName = "lnq2_crawfish", xNames = c("lnp1_catfish", "lnp2_crawfish", "lnp3_clams", "lnp4_shrimp", "lnp5_tilapia", "lnp6_salmon", "lnX"), data=Dta_sub, homWeights = weights)
+# 
+# e1x_np <- list()
+# e1x_np$e11 <- mean(est1_np$est$grad[,1])
+# e1x_np$e12 <- mean(est1_np$est$grad[,2])
+# e1x_np$e13 <- mean(est1_np$est$grad[,3])
+# e1x_np$e14 <- mean(est1_np$est$grad[,4])
+# e1x_np$e15 <- mean(est1_np$est$grad[,5])
+# e1x_np$e16 <- mean(est1_np$est$grad[,6])
+# 
+# e2x_np <- list()
+# e2x_np$e21 <- mean(est2_np$est$grad[,1])
+# e2x_np$e22 <- mean(est2_np$est$grad[,2])
+# e2x_np$e23 <- mean(est2_np$est$grad[,3])
+# e2x_np$e24 <- mean(est2_np$est$grad[,4])
+# e2x_np$e25 <- mean(est2_np$est$grad[,5])
+# e2x_np$e26 <- mean(est2_np$est$grad[,6])
+# 
+
+```
+
+
