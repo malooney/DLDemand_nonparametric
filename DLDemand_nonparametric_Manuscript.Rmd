@@ -36,7 +36,7 @@ library(micEconAids)
 
 options(digits=5)
 
-setwd("~/Google Drive/digitalLibrary/*AAEC 6310 Demand and Price Analysis/demandPaper")
+setwd("~/Google Drive/digitalLibrary/*AAEC 6310 Demand and Price Analysis/DLDemand_nonparametric")
 
 source("~/Google Drive/digitalLibrary/*AAEC 6310 Demand and Price Analysis/demandLab1/calculate_pValue.R")
 source("~/Google Drive/digitalLibrary/*AAEC 6310 Demand and Price Analysis/demandLab1/calculate_tValues.R")
@@ -100,12 +100,12 @@ Dta_sub <- Dta1[, c(21, 28:39)]
 # Single Equation Model Estimation using Log-Log Functional Form
 # Estimate Marshallian elasticities - unrestricted
 
-marshallian_1.lm <- lm(lnq1_catfish ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
-marshallian_2.lm <- lm(lnq2_crawfish ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
-marshallian_3.lm <- lm(lnq3_clams ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
-marshallian_4.lm <- lm(lnq4_shrimp ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
-marshallian_5.lm <- lm(lnq5_tilapia ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
-marshallian_6.lm <- lm(lnq6_salmon ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
+dld_marshallian_1.lm <- lm(lnq1_catfish ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
+dld_marshallian_2.lm <- lm(lnq2_crawfish ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
+dld_marshallian_3.lm <- lm(lnq3_clams ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
+dld_marshallian_4.lm <- lm(lnq4_shrimp ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
+dld_marshallian_5.lm <- lm(lnq5_tilapia ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
+dld_marshallian_6.lm <- lm(lnq6_salmon ~ lnp1_catfish+ lnp2_crawfish+ lnp3_clams+ lnp4_shrimp+ lnp5_tilapia+ lnp6_salmon+ lnX, data=Dta1)
 ```
 
 ```{r, echo=FALSE, message=FALSE}
