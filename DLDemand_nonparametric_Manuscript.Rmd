@@ -242,7 +242,7 @@ KRS_test_4 <- readRDS("data/KRS_test_4.rds")
 KRS_test_5 <- readRDS("data/KRS_test_5.rds")
 KRS_test_6 <- readRDS("data/KRS_test_6.rds")
 
-
+par(mfrow=c(2,2))
 e1x_np <- list()
 e1x_np$e11_np <- mean(model_1.np$grad[,1])
 e1x_np$e12_np <- mean(model_1.np$grad[,2])
