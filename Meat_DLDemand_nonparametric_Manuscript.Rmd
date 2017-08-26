@@ -1,0 +1,215 @@
+---
+title: "Demand Paper"
+author: "Matthew Aaron Looney"
+date: "08/22/2017"
+output:
+  pdf_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+    toc_depth: 4
+  html_document:
+    toc: yes
+    toc_depth: '4'
+header-includes:
+- \usepackage{graphicx}
+- \usepackage{rotating}
+- \usepackage{longtable}
+- \usepackage{amssymb,amsmath}
+- \usepackage{dcolumn}
+---
+
+```{r House Keeping, echo=FALSE, message=FALSE}
+
+rm(list=ls())
+
+# randNum <- round(runif(1, 1, 1e8)) # !!! RUN ONLY ONCE TO GENERATE RN for seed !!!
+# randNum
+set.seed(38532842) # all sequential simulations will start from this seed
+
+library(readxl)
+library(stargazer)
+library(systemfit)
+library(np)
+library(micEconAids)
+
+options(np.messages=FALSE) 
+#options(digits=5)
+
+setwd("~/Google Drive/digitalLibrary/*AAEC 6310 Demand and Price Analysis/DLDemand_nonparametric")
+
+source("~/Google Drive/digitalLibrary/*AAEC 6310 Demand and Price Analysis/demandLab1/calculate_pValue.R")
+source("~/Google Drive/digitalLibrary/*AAEC 6310 Demand and Price Analysis/demandLab1/calculate_tValues.R")
+
+```
+
+```{r Import & data manip, echo=FALSE, message=FALSE}
+
+data(USMeatConsump)
+Dta1 <- USMeatConsump
+rm(USMeatConsump)
+Dta_sub <- Dta1[,7:19]
+Dta_sub_log <- Dta_sub[,1:9]
+Dta_sub_log <- log(Dta_sub_log)
+```
+
+```{r Single Equation Model Estimation using Log-Log Functional Form, echo=FALSE, message=FALSE}
+
+# Single Equation Model Estimation using Log-Log Functional Form
+# Estimate Marshallian elasticities - unrestricted
+
+dld_marshallian_1.lm <- lm(beef_q ~ beef_p+ pork_p+ chick_p+ turkey_p+ meat_exp, data=Dta_sub_log)
+dld_marshallian_2.lm <- lm(pork_q ~ beef_p+ pork_p+ chick_p+ turkey_p+ meat_exp, data=Dta_sub_log)
+dld_marshallian_3.lm <- lm(chick_q ~ beef_p+ pork_p+ chick_p+ turkey_p+ meat_exp, data=Dta_sub_log)
+dld_marshallian_4.lm <- lm(turkey_q ~ beef_p+ pork_p+ chick_p+ turkey_p+ meat_exp, data=Dta_sub_log)
+
+```
+
+```{r, echo=FALSE, message=FALSE}
+
+dld_1_formula <- formula(beef_q ~ beef_p+ pork_p+ chick_p+ turkey_p+ meat_exp)
+dld_2_formula <- formula(pork_q ~ beef_p+ pork_p+ chick_p+ turkey_p+ meat_exp)
+dld_3_formula <- formula(chick_q ~ beef_p+ pork_p+ chick_p+ turkey_p+ meat_exp)
+dld_4_formula <- formula(turkey_q ~ beef_p+ pork_p+ chick_p+ turkey_p+ meat_exp)
+
+xdat <- Dta_sub[,c(6:9, 1)]
+ydat_1 <- Dta_sub_log$beef_q
+ydat_2 <- Dta_sub_log$pork_q
+ydat_3 <- Dta_sub_log$chick_q
+ydat_4 <- Dta_sub_log$turkey_q
+
+dld_1 <- lm(beef_q ~ beef_p+ pork_p+ chick_p+ turkey_p+ meat_exp, data=Dta_sub_log, x=TRUE, y=TRUE)
+dld_2 <- lm(pork_q ~ beef_p+ pork_p+ chick_p+ turkey_p+ meat_exp, data=Dta_sub_log, x=TRUE, y=TRUE)
+dld_3 <- lm(chick_q ~ beef_p+ pork_p+ chick_p+ turkey_p+ meat_exp, data=Dta_sub_log, x=TRUE, y=TRUE)
+dld_4 <- lm(turkey_q ~ beef_p+ pork_p+ chick_p+ turkey_p+ meat_exp, data=Dta_sub_log, x=TRUE, y=TRUE)
+
+### !!! time consuming code - only run when chaging code !!! ###
+### Consistent Model Specification Test
+cmsTest_1 <- npcmstest(model=dld_1, xdat=xdat, ydat = ydat_1)
+cmsTest_2 <- npcmstest(model=dld_2, xdat=xdat, ydat = ydat_2)
+cmsTest_3 <- npcmstest(model=dld_3, xdat=xdat, ydat = ydat_3)
+cmsTest_4 <- npcmstest(model=dld_4, xdat=xdat, ydat = ydat_4)
+
+saveRDS(cmsTest_1, file= "Meatdata/cmsTest_1.rds")
+saveRDS(cmsTest_2, file= "Meatdata/cmsTest_2.rds")
+saveRDS(cmsTest_3, file= "Meatdata/cmsTest_3.rds")
+saveRDS(cmsTest_4, file= "Meatdata/cmsTest_4.rds")
+
+cmsTest_1 <- readRDS("Meatdata/cmsTest_1.rds")
+cmsTest_2 <- readRDS("Meatdata/cmsTest_2.rds")
+cmsTest_3 <- readRDS("Meatdata/cmsTest_3.rds")
+cmsTest_4 <- readRDS("Meatdata/cmsTest_4.rds")
+
+### !!! time consuming code - only run when chaging code !!! ###
+### bandwidth calculations ###
+ bw.all_1 <- npregbw(formula = dld_1_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
+bw.all_2 <- npregbw(formula = dld_2_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
+bw.all_3 <- npregbw(formula = dld_3_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
+bw.all_4 <- npregbw(formula = dld_4_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
+
+saveRDS(bw.all_1, file= "Meatdata/bw.all_1.rds")
+saveRDS(bw.all_2, file= "Meatdata/bw.all_2.rds")
+saveRDS(bw.all_3, file= "Meatdata/bw.all_3.rds")
+saveRDS(bw.all_4, file= "Meatdata/bw.all_4.rds")
+
+bw.all_1 <- readRDS("Meatdata/bw.all_1.rds")
+bw.all_2 <- readRDS("Meatdata/bw.all_2.rds")
+bw.all_3 <- readRDS("Meatdata/bw.all_3.rds")
+bw.all_4 <- readRDS("Meatdata/bw.all_4.rds")
+
+summary(bw.all_1)
+summary(bw.all_2)
+summary(bw.all_3)
+summary(bw.all_4)
+
+model_1.np <- npreg(bws = bw.all_1, gradients = TRUE, residuals = TRUE)
+model_2.np <- npreg(bws = bw.all_2, gradients = TRUE, residuals = TRUE)
+model_3.np <- npreg(bws = bw.all_3, gradients = TRUE, residuals = TRUE)
+model_4.np <- npreg(bws = bw.all_4, gradients = TRUE, residuals = TRUE)
+
+summary(model_1.np)
+summary(model_2.np)
+summary(model_3.np)
+summary(model_4.np)
+
+### !!! time consuming code - only run when chaging code !!! ###
+#Kernel Regression Significance Test
+KRS_test_1 <- npsigtest(model_1.np)
+KRS_test_2 <- npsigtest(model_2.np)
+KRS_test_3 <- npsigtest(model_3.np)
+KRS_test_4 <- npsigtest(model_4.np)
+
+saveRDS(KRS_test_1, file= "Meatdata/KRS_test_1.rds")
+saveRDS(KRS_test_2, file= "Meatdata/KRS_test_2.rds")
+saveRDS(KRS_test_3, file= "Meatdata/KRS_test_3.rds")
+saveRDS(KRS_test_4, file= "Meatdata/KRS_test_4.rds")
+
+KRS_test_1 <- readRDS("Meatdata/KRS_test_1.rds")
+KRS_test_2 <- readRDS("Meatdata/KRS_test_2.rds")
+KRS_test_3 <- readRDS("Meatdata/KRS_test_3.rds")
+KRS_test_4 <- readRDS("Meatdata/KRS_test_4.rds")
+
+par(mfrow=c(2,2))
+
+e1x_np <- list()
+e1x_np$e11_np <- mean(model_1.np$grad[,1])
+e1x_np$e12_np <- mean(model_1.np$grad[,2])
+e1x_np$e13_np <- mean(model_1.np$grad[,3])
+e1x_np$e14_np <- mean(model_1.np$grad[,4])
+e1x_np$eta1_np <- mean(model_1.np$grad[,5])
+plot(density(model_1.np$grad[,1]))
+
+e2x_np <- list()
+e2x_np$e21_np <- mean(model_2.np$grad[,1])
+e2x_np$e22_np <- mean(model_2.np$grad[,2])
+e2x_np$e23_np <- mean(model_2.np$grad[,3])
+e2x_np$e24_np <- mean(model_2.np$grad[,4])
+e2x_np$eta2_np <- mean(model_2.np$grad[,5])
+plot(density(model_2.np$grad[,2]))
+
+e3x_np <- list()
+e3x_np$e31_np <- mean(model_3.np$grad[,1])
+e3x_np$e32_np <- mean(model_3.np$grad[,2])
+e3x_np$e33_np <- mean(model_3.np$grad[,3])
+e3x_np$e34_np <- mean(model_3.np$grad[,4])
+e3x_np$eta3_np <- mean(model_3.np$grad[,5])
+plot(density(model_3.np$grad[,3]))
+
+e4x_np <- list()
+e4x_np$e41_np <- mean(model_4.np$grad[,1])
+e4x_np$e42_np <- mean(model_4.np$grad[,2])
+e4x_np$e43_np <- mean(model_4.np$grad[,3])
+e4x_np$e44_np <- mean(model_4.np$grad[,4])
+e4x_np$eta4_np <- mean(model_4.np$grad[,5])
+plot(density(model_4.np$grad[,4]))
+
+exx_np <- matrix(unlist(c(e1x_np, e2x_np, e3x_np, e4x_np)), nrow = 4, byrow = TRUE)
+
+
+###     ###
+# weights <- c( lnp1_catfish=mean(Dta_sub$lnp1_catfish), lnp2_crawfish=mean(Dta_sub$lnp2_crawfish), lnp3_clams=mean(Dta_sub$lnp3_clams), lnp4_shrimp=mean(Dta_sub$lnp4_shrimp), lnp5_tilapia=mean(Dta_sub$lnp5_tilapia), lnp6_salmon=mean(Dta_sub$lnp6_salmon))
+# 
+# weights <- weights/sum(weights)
+# 
+# est1_np <- npregHom(yName = "lnq1_catfish", xNames = c("lnp1_catfish", "lnp2_crawfish", "lnp3_clams", "lnp4_shrimp", "lnp5_tilapia", "lnp6_salmon", "lnX"), data=Dta_sub, homWeights = weights)
+# 
+# est2_np <- npregHom(yName = "lnq2_crawfish", xNames = c("lnp1_catfish", "lnp2_crawfish", "lnp3_clams", "lnp4_shrimp", "lnp5_tilapia", "lnp6_salmon", "lnX"), data=Dta_sub, homWeights = weights)
+# 
+# e1x_np <- list()
+# e1x_np$e11 <- mean(est1_np$est$grad[,1])
+# e1x_np$e12 <- mean(est1_np$est$grad[,2])
+# e1x_np$e13 <- mean(est1_np$est$grad[,3])
+# e1x_np$e14 <- mean(est1_np$est$grad[,4])
+# e1x_np$e15 <- mean(est1_np$est$grad[,5])
+# e1x_np$e16 <- mean(est1_np$est$grad[,6])
+# 
+# e2x_np <- list()
+# e2x_np$e21 <- mean(est2_np$est$grad[,1])
+# e2x_np$e22 <- mean(est2_np$est$grad[,2])
+# e2x_np$e23 <- mean(est2_np$est$grad[,3])
+# e2x_np$e24 <- mean(est2_np$est$grad[,4])
+# e2x_np$e25 <- mean(est2_np$est$grad[,5])
+# e2x_np$e26 <- mean(est2_np$est$grad[,6])
+# 
+
+```
