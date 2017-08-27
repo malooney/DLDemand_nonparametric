@@ -119,17 +119,17 @@ cmsTest_3 <- readRDS("Equaddata/cmsTest_3.rds")
 
 ### !!! time consuming code - only run when chaging code !!! ###
 ### bandwidth calculations ###
-#  bw.all_1 <- npregbw(formula = dld_1_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
-# bw.all_2 <- npregbw(formula = dld_2_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
-# bw.all_3 <- npregbw(formula = dld_3_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
+ bw.all_1 <- npregbw(formula = dld_1_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "epanechnikov", data = Dta_sub_log)
+bw.all_2 <- npregbw(formula = dld_2_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "epanechnikov", data = Dta_sub_log)
+bw.all_3 <- npregbw(formula = dld_3_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "epanechnikov", data = Dta_sub_log)
 # 
 # saveRDS(bw.all_1, file= "Equaddata/bw.all_1.rds")
 # saveRDS(bw.all_2, file= "Equaddata/bw.all_2.rds")
 # saveRDS(bw.all_3, file= "Equaddata/bw.all_3.rds")
 
-bw.all_1 <- readRDS("Equaddata/bw.all_1.rds")
-bw.all_2 <- readRDS("Equaddata/bw.all_2.rds")
-bw.all_3 <- readRDS("Equaddata/bw.all_3.rds")
+# bw.all_1 <- readRDS("Equaddata/bw.all_1.rds")
+# bw.all_2 <- readRDS("Equaddata/bw.all_2.rds")
+# bw.all_3 <- readRDS("Equaddata/bw.all_3.rds")
 
 # summary(bw.all_1)
 # summary(bw.all_2)
@@ -145,17 +145,17 @@ model_3.np <- npreg(bws = bw.all_3, gradients = TRUE, residuals = TRUE)
 
 ### !!! time consuming code - only run when chaging code !!! ###
 #Kernel Regression Significance Test
-# KRS_test_1 <- npsigtest(model_1.np)
-# KRS_test_2 <- npsigtest(model_2.np)
-# KRS_test_3 <- npsigtest(model_3.np)
+KRS_test_1 <- npsigtest(model_1.np)
+KRS_test_2 <- npsigtest(model_2.np)
+KRS_test_3 <- npsigtest(model_3.np)
 # 
 # saveRDS(KRS_test_1, file= "Equaddata/KRS_test_1.rds")
 # saveRDS(KRS_test_2, file= "Equaddata/KRS_test_2.rds")
 # saveRDS(KRS_test_3, file= "Equaddata/KRS_test_3.rds")
 
-KRS_test_1 <- readRDS("Equaddata/KRS_test_1.rds")
-KRS_test_2 <- readRDS("Equaddata/KRS_test_2.rds")
-KRS_test_3 <- readRDS("Equaddata/KRS_test_3.rds")
+# KRS_test_1 <- readRDS("Equaddata/KRS_test_1.rds")
+# KRS_test_2 <- readRDS("Equaddata/KRS_test_2.rds")
+# KRS_test_3 <- readRDS("Equaddata/KRS_test_3.rds")
 
 par(mfrow=c(1,3))
 
