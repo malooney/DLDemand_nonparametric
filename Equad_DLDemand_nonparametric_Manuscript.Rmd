@@ -80,9 +80,15 @@ dld_marshallian_1.lm <- lm(q1 ~ p1+ p2+ p3+ X, data=Dta_sub_log)
 dld_marshallian_2.lm <- lm(q2 ~ p1+ p2+ p3+ X, data=Dta_sub_log)
 dld_marshallian_3.lm <- lm(q3 ~ p1+ p2+ p3+ X, data=Dta_sub_log)
 
-```
+# summary(dld_marshallian_1.lm)
+# summary(dld_marshallian_2.lm)
+# summary(dld_marshallian_3.lm)
 
-```{r, echo=FALSE, message=FALSE}
+exx_par <- matrix(unlist(c(coef(dld_marshallian_1.lm)[2:5], coef(dld_marshallian_2.lm)[2:5], coef(dld_marshallian_3.lm)[2:5])), nrow = 3, byrow = TRUE)
+
+```
+  
+```{r, echo=FALSE, message=FALSE, fig.height=3}
 
 dld_1_formula <- formula(q1 ~ p1+ p2+ p3+ X)
 dld_2_formula <- formula(q2 ~ p1+ p2+ p3+ X)
@@ -99,13 +105,13 @@ dld_3 <- lm(q3 ~ p1+ p2+ p3+ X, data=Dta_sub_log, x=TRUE, y=TRUE)
 
 ### !!! time consuming code - only run when chaging code !!! ###
 ### Consistent Model Specification Test
-cmsTest_1 <- npcmstest(model=dld_1, xdat=xdat, ydat = ydat_1)
-cmsTest_2 <- npcmstest(model=dld_2, xdat=xdat, ydat = ydat_2)
-cmsTest_3 <- npcmstest(model=dld_3, xdat=xdat, ydat = ydat_3)
-
-saveRDS(cmsTest_1, file= "Equaddata/cmsTest_1.rds")
-saveRDS(cmsTest_2, file= "Equaddata/cmsTest_2.rds")
-saveRDS(cmsTest_3, file= "Equaddata/cmsTest_3.rds")
+# cmsTest_1 <- npcmstest(model=dld_1, xdat=xdat, ydat = ydat_1)
+# cmsTest_2 <- npcmstest(model=dld_2, xdat=xdat, ydat = ydat_2)
+# cmsTest_3 <- npcmstest(model=dld_3, xdat=xdat, ydat = ydat_3)
+# 
+# saveRDS(cmsTest_1, file= "Equaddata/cmsTest_1.rds")
+# saveRDS(cmsTest_2, file= "Equaddata/cmsTest_2.rds")
+# saveRDS(cmsTest_3, file= "Equaddata/cmsTest_3.rds")
 
 cmsTest_1 <- readRDS("Equaddata/cmsTest_1.rds")
 cmsTest_2 <- readRDS("Equaddata/cmsTest_2.rds")
@@ -113,68 +119,91 @@ cmsTest_3 <- readRDS("Equaddata/cmsTest_3.rds")
 
 ### !!! time consuming code - only run when chaging code !!! ###
 ### bandwidth calculations ###
- bw.all_1 <- npregbw(formula = dld_1_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
-bw.all_2 <- npregbw(formula = dld_2_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
-bw.all_3 <- npregbw(formula = dld_3_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
-
-saveRDS(bw.all_1, file= "Equaddata/bw.all_1.rds")
-saveRDS(bw.all_2, file= "Equaddata/bw.all_2.rds")
-saveRDS(bw.all_3, file= "Equaddata/bw.all_3.rds")
+#  bw.all_1 <- npregbw(formula = dld_1_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
+# bw.all_2 <- npregbw(formula = dld_2_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
+# bw.all_3 <- npregbw(formula = dld_3_formula, regtype = "ll", bwmethod = "cv.ls", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
+# 
+# saveRDS(bw.all_1, file= "Equaddata/bw.all_1.rds")
+# saveRDS(bw.all_2, file= "Equaddata/bw.all_2.rds")
+# saveRDS(bw.all_3, file= "Equaddata/bw.all_3.rds")
 
 bw.all_1 <- readRDS("Equaddata/bw.all_1.rds")
 bw.all_2 <- readRDS("Equaddata/bw.all_2.rds")
 bw.all_3 <- readRDS("Equaddata/bw.all_3.rds")
 
-summary(bw.all_1)
-summary(bw.all_2)
-summary(bw.all_3)
+# summary(bw.all_1)
+# summary(bw.all_2)
+# summary(bw.all_3)
 
 model_1.np <- npreg(bws = bw.all_1, gradients = TRUE, residuals = TRUE)
 model_2.np <- npreg(bws = bw.all_2, gradients = TRUE, residuals = TRUE)
 model_3.np <- npreg(bws = bw.all_3, gradients = TRUE, residuals = TRUE)
 
-summary(model_1.np)
-summary(model_2.np)
-summary(model_3.np)
+# summary(model_1.np)
+# summary(model_2.np)
+# summary(model_3.np)
 
 ### !!! time consuming code - only run when chaging code !!! ###
 #Kernel Regression Significance Test
-KRS_test_1 <- npsigtest(model_1.np)
-KRS_test_2 <- npsigtest(model_2.np)
-KRS_test_3 <- npsigtest(model_3.np)
-
-saveRDS(KRS_test_1, file= "Equaddata/KRS_test_1.rds")
-saveRDS(KRS_test_2, file= "Equaddata/KRS_test_2.rds")
-saveRDS(KRS_test_3, file= "Equaddata/KRS_test_3.rds")
+# KRS_test_1 <- npsigtest(model_1.np)
+# KRS_test_2 <- npsigtest(model_2.np)
+# KRS_test_3 <- npsigtest(model_3.np)
+# 
+# saveRDS(KRS_test_1, file= "Equaddata/KRS_test_1.rds")
+# saveRDS(KRS_test_2, file= "Equaddata/KRS_test_2.rds")
+# saveRDS(KRS_test_3, file= "Equaddata/KRS_test_3.rds")
 
 KRS_test_1 <- readRDS("Equaddata/KRS_test_1.rds")
 KRS_test_2 <- readRDS("Equaddata/KRS_test_2.rds")
 KRS_test_3 <- readRDS("Equaddata/KRS_test_3.rds")
 
-par(mfrow=c(2,2))
+par(mfrow=c(1,3))
 
 e1x_np <- list()
 e1x_np$e11_np <- mean(model_1.np$grad[,1])
 e1x_np$e12_np <- mean(model_1.np$grad[,2])
 e1x_np$e13_np <- mean(model_1.np$grad[,3])
 e1x_np$eta1_np <- mean(model_1.np$grad[,4])
-plot(density(model_1.np$grad[,1]))
+plot(density(model_1.np$grad[,1]), sub = "Meats - own price elasticity", main= "")
 
 e2x_np <- list()
 e2x_np$e21_np <- mean(model_2.np$grad[,1])
 e2x_np$e22_np <- mean(model_2.np$grad[,2])
 e2x_np$e23_np <- mean(model_2.np$grad[,3])
 e2x_np$eta2_np <- mean(model_2.np$grad[,4])
-plot(density(model_2.np$grad[,2]))
+plot(density(model_2.np$grad[,2]), sub = "Dairy - own price elasticity", main= "")
 
 e3x_np <- list()
 e3x_np$e31_np <- mean(model_3.np$grad[,1])
 e3x_np$e32_np <- mean(model_3.np$grad[,2])
 e3x_np$e33_np <- mean(model_3.np$grad[,3])
 e3x_np$eta3_np <- mean(model_3.np$grad[,4])
-plot(density(model_3.np$grad[,3]))
+plot(density(model_3.np$grad[,3]), sub = "Pulses - own price elasticity", main= "")
 
-exx_np <- matrix(unlist(c(e1x_np, e2x_np, e3x_np)), nrow = 4, byrow = TRUE)
+exx_np <- matrix(unlist(c(e1x_np, e2x_np, e3x_np)), nrow = 3, byrow = TRUE)
+
+#########################################
+### Full AIDS Model empirical results ###
+#########################################
+priceNames <- c("p1", "p2", "p3")
+shareNames <- c("w1", "w2", "w3")
+
+
+AIDS_estResult_constraint <- aidsEst( priceNames, shareNames, "X",
+                       data = Dta_sub,
+                       method = "IL", ILmaxiter = 1000, ILtol = 1e-10,
+                       priceIndex = "S", hom = TRUE, sym = TRUE)
+
+AIDS_estResult_no_constraint <- aidsEst( priceNames, shareNames, "X",
+                       data = Dta_sub,
+                       method = "IL", ILmaxiter = 1000, ILtol = 1e-10,
+                       priceIndex = "S", hom = FALSE, sym = FALSE)
+
+##############################
+### Full AIDS elasticities ###
+##############################
+AIDS_elas_M_H_income_constraint <- elas( AIDS_estResult_constraint, method = "AIDS" )
+AIDS_elas_M_H_income_no_constraint <- elas( AIDS_estResult_no_constraint, method = "AIDS" )
 
 
 ###     ###
@@ -202,5 +231,17 @@ exx_np <- matrix(unlist(c(e1x_np, e2x_np, e3x_np)), nrow = 4, byrow = TRUE)
 # e2x_np$e25 <- mean(est2_np$est$grad[,5])
 # e2x_np$e26 <- mean(est2_np$est$grad[,6])
 # 
+
+```
+  
+```{r Full AIDS Output, echo=FALSE, message=FALSE, results='asis'}
+
+stargazer(exx_par, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Parametric")
+
+stargazer(exx_np, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="non Parametric")
+
+#stargazer(AIDS_H_elas_t_sig, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Hicksian")
+
+#stargazer(AIDS_a_b_eta, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Alpha, and Beta parameter estimates, Average Budget Shares, and Income Elasticities")
 
 ```
