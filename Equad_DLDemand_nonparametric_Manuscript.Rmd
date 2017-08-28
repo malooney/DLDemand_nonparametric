@@ -119,7 +119,7 @@ cmsTest_3 <- readRDS("Equaddata/cmsTest_3.rds")
 
 ### !!! time consuming code - only run when chaging code !!! ###
 ### bandwidth calculations ###
-#bw.all_1 <- npregbw(formula = dld_1_formula, regtype = "ll", bwmethod = "cv.aic", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
+# bw.all_1 <- npregbw(formula = dld_1_formula, regtype = "ll", bwmethod = "cv.aic", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
 # bw.all_2 <- npregbw(formula = dld_2_formula, regtype = "ll", bwmethod = "cv.aic", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
 # bw.all_3 <- npregbw(formula = dld_3_formula, regtype = "ll", bwmethod = "cv.aic", bwtype="fixed", ckertype= "gaussian", data = Dta_sub_log)
 # 
@@ -169,30 +169,53 @@ KRS_test_1.1 <- readRDS("Equaddata/KRS_test_1.1.rds")
 KRS_test_2.1 <- readRDS("Equaddata/KRS_test_2.1.rds")
 KRS_test_3.1 <- readRDS("Equaddata/KRS_test_3.1.rds")
 
-par(mfrow=c(1,3))
-
 e1x_np <- list()
 e1x_np$e11_np <- mean(model_1.np$grad[,1])
 e1x_np$e12_np <- mean(model_1.np$grad[,2])
 e1x_np$e13_np <- mean(model_1.np$grad[,3])
 e1x_np$eta1_np <- mean(model_1.np$grad[,4])
-plot(density(model_1.np$grad[,1]), sub = "Meats - own price elasticity", main= "", xlim=c(-5,5))
+
+e1x_np_t <- list()
+e1x_np_t$e11_np_t <- mean(model_1.np$grad[,1])/mean(model_1.np$gerr[,1])
+e1x_np_t$e12_np_t <- mean(model_1.np$grad[,2])/mean(model_1.np$gerr[,2])
+e1x_np_t$e13_np_t <- mean(model_1.np$grad[,3])/mean(model_1.np$gerr[,3])
+e1x_np_t$eta1_np_t <- mean(model_1.np$grad[,4])/mean(model_1.np$gerr[,4])
 
 e2x_np <- list()
 e2x_np$e21_np <- mean(model_2.np$grad[,1])
 e2x_np$e22_np <- mean(model_2.np$grad[,2])
 e2x_np$e23_np <- mean(model_2.np$grad[,3])
 e2x_np$eta2_np <- mean(model_2.np$grad[,4])
-plot(density(model_2.np$grad[,2]), sub = "Dairy - own price elasticity", main= "",xlim=c(-5,5))
+
+e2x_np_t <- list()
+e2x_np_t$e21_np_t <- mean(model_2.np$grad[,1])/mean(model_2.np$gerr[,1])
+e2x_np_t$e22_np_t <- mean(model_2.np$grad[,2])/mean(model_2.np$gerr[,2])
+e2x_np_t$e23_np_t <- mean(model_2.np$grad[,3])/mean(model_2.np$gerr[,3])
+e2x_np_t$eta2_np_t <- mean(model_2.np$grad[,4])/mean(model_2.np$gerr[,4])
 
 e3x_np <- list()
 e3x_np$e31_np <- mean(model_3.np$grad[,1])
 e3x_np$e32_np <- mean(model_3.np$grad[,2])
 e3x_np$e33_np <- mean(model_3.np$grad[,3])
 e3x_np$eta3_np <- mean(model_3.np$grad[,4])
+
+par(mfrow=c(1,3))
+plot(density(model_1.np$grad[,1]), sub = "Meats - own price elasticity", main= "", xlim=c(-5,5))
+plot(density(model_2.np$grad[,2]), sub = "Dairy - own price elasticity", main= "",xlim=c(-5,5))
 plot(density(model_3.np$grad[,3]), sub = "Pulses - own price elasticity", main= "", xlim=c(-5,5))
 
+plot(density(model_1.np$grad[,4]), sub = "Meats - income elasticity", main= "", xlim=c(-5,5))
+plot(density(model_2.np$grad[,4]), sub = "Dairy - income elasticity", main= "",xlim=c(-5,5))
+plot(density(model_3.np$grad[,4]), sub = "Pulses - income elasticity", main= "", xlim=c(-5,5))
+
+e3x_np_t <- list()
+e3x_np_t$e31_np_t <- mean(model_3.np$grad[,1])/mean(model_3.np$gerr[,1])
+e3x_np_t$e32_np_t <- mean(model_3.np$grad[,2])/mean(model_3.np$gerr[,2])
+e3x_np_t$e33_np_t <- mean(model_3.np$grad[,3])/mean(model_3.np$gerr[,3])
+e3x_np_t$eta3_np_t <- mean(model_3.np$grad[,4])/mean(model_3.np$gerr[,4])
+
 exx_np <- matrix(unlist(c(e1x_np, e2x_np, e3x_np)), nrow = 3, byrow = TRUE)
+exx_np_t <- matrix(unlist(c(e1x_np_t, e2x_np_t, e3x_np_t)), nrow = 3, byrow = TRUE)
 
 #########################################
 ### Full AIDS Model empirical results ###
@@ -210,6 +233,9 @@ AIDS_estResult_no_constraint <- aidsEst( priceNames, shareNames, "X",
                        data = Dta_sub,
                        method = "IL", ILmaxiter = 1000, ILtol = 1e-10,
                        priceIndex = "S", hom = FALSE, sym = FALSE)
+
+#summary(AIDS_estResult_constraint)
+#summary(AIDS_estResult_no_constraint)
 
 ##############################
 ### Full AIDS elasticities ###
@@ -252,7 +278,7 @@ stargazer(exx_par, header=F, type="latex", summary = FALSE, font.size = "small",
 
 stargazer(exx_np, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Nonparametric")
 
-#stargazer(AIDS_H_elas_t_sig, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Hicksian")
+stargazer(AIDS_elas_M_H_income_constraint$marshall, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Hicksian")
 
 #stargazer(AIDS_a_b_eta, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Alpha, and Beta parameter estimates, Average Budget Shares, and Income Elasticities")
 
