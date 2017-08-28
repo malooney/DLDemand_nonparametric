@@ -80,11 +80,44 @@ dld_marshallian_1.lm <- lm(q1 ~ p1+ p2+ p3+ X, data=Dta_sub_log)
 dld_marshallian_2.lm <- lm(q2 ~ p1+ p2+ p3+ X, data=Dta_sub_log)
 dld_marshallian_3.lm <- lm(q3 ~ p1+ p2+ p3+ X, data=Dta_sub_log)
 
-# summary(dld_marshallian_1.lm)
-# summary(dld_marshallian_2.lm)
-# summary(dld_marshallian_3.lm)
+smry_dld_marshallian_1 <- summary(dld_marshallian_1.lm)
+smry_dld_marshallian_2 <- summary(dld_marshallian_2.lm)
+smry_dld_marshallian_3 <- summary(dld_marshallian_3.lm)
 
 exx_par <- matrix(unlist(c(coef(dld_marshallian_1.lm)[2:5], coef(dld_marshallian_2.lm)[2:5], coef(dld_marshallian_3.lm)[2:5])), nrow = 3, byrow = TRUE)
+
+exx_par_t <- matrix(
+  unlist(c( 
+  coef(dld_marshallian_1.lm)[2:5]/sqrt(diag(vcov(dld_marshallian_1.lm)[-1,-1])), 
+  coef(dld_marshallian_2.lm)[2:5]/sqrt(diag(vcov(dld_marshallian_2.lm)[-1,-1])), 
+  coef(dld_marshallian_3.lm)[2:5]/sqrt(diag(vcov(dld_marshallian_3.lm)[-1,-1]))
+  )), 
+  nrow = 3, byrow = TRUE)
+
+######################################################################################
+### DLD_parametric - calculate signif on Marshallian demand elasticities matrix    ###
+######################################################################################
+i <- 1
+j <- 1
+temp <- matrix(nrow=3, ncol = 4, 
+  dimnames = list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("meats", "dairy", "pulses", "income_elasticity"))
+  )
+
+while(i != nrow(exx_par_t)+1 && j != ncol(exx_par_t) ){
+  
+  for(j in 1:ncol(exx_par_t)){
+    temp[i,j] <- paste(signif(exx_par[i,j], 4), calculate_pValue(exx_par_t[i,j], 156)[2], sep="")
+    j <- j+1
+  }
+  i <- i+1
+  j <- 1
+}
+exx_par_t_sig <- temp # put results into matrix
+
+exx_par_r2 <- matrix(c(signif(smry_dld_marshallian_1$r.squared, 5), signif(smry_dld_marshallian_2$r.squared, 5), signif(smry_dld_marshallian_3$r.squared, 5)), ncol=1)
+
+exx_par_wr2 <- cbind(exx_par_t_sig, exx_par_r2)
+dimnames(exx_par_wr2) <- list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("meats", "dairy", "pulses", "income_elasticity", "R-squared"))
 
 ```
   
@@ -215,7 +248,33 @@ e3x_np_t$e33_np_t <- mean(model_3.np$grad[,3])/mean(model_3.np$gerr[,3])
 e3x_np_t$eta3_np_t <- mean(model_3.np$grad[,4])/mean(model_3.np$gerr[,4])
 
 exx_np <- matrix(unlist(c(e1x_np, e2x_np, e3x_np)), nrow = 3, byrow = TRUE)
+exx_np_r2 <- matrix(c(signif(model_1.np$R2, 5), signif(model_2.np$R2, 5), signif(model_3.np$R2, 5)), ncol=1)
+
 exx_np_t <- matrix(unlist(c(e1x_np_t, e2x_np_t, e3x_np_t)), nrow = 3, byrow = TRUE)
+
+##############################################################################
+### DLD_np - calculate signif on Marshallian demand elasticities matrix    ###
+##############################################################################
+i <- 1
+j <- 1
+temp <- matrix(nrow=3, ncol = 4, 
+  dimnames = list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("meats", "dairy", "pulses", "income_elasticity"))
+  )
+
+while(i != nrow(exx_np_t)+1 && j != ncol(exx_np_t) ){
+  
+  for(j in 1:ncol(exx_np_t)){
+    temp[i,j] <- paste(signif(exx_np[i,j], 4), calculate_pValue(exx_np_t[i,j], 156)[2], sep="")
+    j <- j+1
+  }
+  i <- i+1
+  j <- 1
+}
+exx_np_t_sig <- temp # put results into matrix
+
+exx_np_wr2 <- cbind(exx_np_t_sig, exx_np_r2)
+dimnames(exx_np_wr2) <- list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("meats", "dairy", "pulses", "income_elasticity", "R-squared"))
+
 
 #########################################
 ### Full AIDS Model empirical results ###
@@ -237,11 +296,46 @@ AIDS_estResult_no_constraint <- aidsEst( priceNames, shareNames, "X",
 #summary(AIDS_estResult_constraint)
 #summary(AIDS_estResult_no_constraint)
 
-##############################
-### Full AIDS elasticities ###
-##############################
+###########################################
+### Full AIDS elasticities and t-values ###
+###########################################
 AIDS_elas_M_H_income_constraint <- elas( AIDS_estResult_constraint, method = "AIDS" )
 AIDS_elas_M_H_income_no_constraint <- elas( AIDS_estResult_no_constraint, method = "AIDS" )
+
+AIDS_elas_M_constraint <- matrix(AIDS_elas_M_H_income_constraint$marshall, nrow = 3)
+AIDS_elas_income_constraint <- matrix(AIDS_elas_M_H_income_constraint$exp, nrow = 3)
+AIDS_elas_M_income_constraint <- cbind(AIDS_elas_M_constraint, AIDS_elas_income_constraint)
+
+AIDS_elas_M_constraint_t <- matrix(AIDS_elas_M_H_income_constraint$marshallTval, nrow = 3)
+AIDS_elas_income_constraint_t <- matrix(AIDS_elas_M_H_income_constraint$expTval, nrow = 3)
+AIDS_elas_M_income_constraint_t <- cbind(AIDS_elas_M_constraint_t, AIDS_elas_income_constraint_t)
+
+#################################################################################
+### Full AIDS - calculate signif on Marshallian demand elasticities matrix    ###
+#################################################################################
+i <- 1
+j <- 1
+temp <- matrix(nrow=3, ncol = 4, 
+  dimnames = list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("meats", "dairy", "pulses", "income_elasticity"))
+  )
+
+while(i != nrow(AIDS_elas_M_income_constraint_t)+1 && j != ncol(AIDS_elas_M_income_constraint_t) ){
+  
+  for(j in 1:ncol(AIDS_elas_M_income_constraint_t)){
+    temp[i,j] <- paste(signif(AIDS_elas_M_income_constraint[i,j], 4), calculate_pValue(AIDS_elas_M_income_constraint_t[i,j], 156)[2], sep="")
+    j <- j+1
+  }
+  i <- i+1
+  j <- 1
+}
+AIDS_elas_M_income_constraint_t_sig <- temp # put results into matrix
+
+AIDS_elas_M_income_constraint_r2 <- matrix(signif(AIDS_estResult_constraint$r2, 5), ncol=1, dimnames = list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("R-squared")))
+
+AIDS_elas_M_income_constraint_t_sig_wr2 <- cbind(AIDS_elas_M_income_constraint_t_sig, 
+                                                 AIDS_elas_M_income_constraint_r2)
+
+
 
 
 ###     ###
@@ -274,11 +368,11 @@ AIDS_elas_M_H_income_no_constraint <- elas( AIDS_estResult_no_constraint, method
   
 ```{r Full AIDS Output, echo=FALSE, message=FALSE, results='asis'}
 
-stargazer(exx_par, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Parametric")
+stargazer(exx_par_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Parametric - Double Log Demand Model")
 
-stargazer(exx_np, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Nonparametric")
+stargazer(exx_np_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Nonparametric Regression using Gaussian Kernel")
 
-stargazer(AIDS_elas_M_H_income_constraint$marshall, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Hicksian")
+stargazer(AIDS_elas_M_income_constraint_t_sig_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Marshallian")
 
 #stargazer(AIDS_a_b_eta, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Alpha, and Beta parameter estimates, Average Budget Shares, and Income Elasticities")
 
