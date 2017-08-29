@@ -1,2 +1,4 @@
 # DLDemand_nonparametric-
 Demand Analysis of the Double Log System - nonparametric studies
+
+abstract: "Nonparametric econometric analysis has been a growing field of study over the past few decades. Many new techniques have been developed within a theoretical framework. However, despite the rapid growth of theoretical results, nonparametric applied research has lagged considerably. This paper employs a nonparametric regression analysis within the context of demand theory. Data on prices and quantites of three commodities (meats, dairy products and beans) from the 2006 Ecuadorian consumer expenditure survey will be evaluated to derive Marshallian price and income elasticities. The nonparametric results will be compared with standard parametric demand analysis tools such as the Log-Log demand model and the Almost Ideal Demand system to guage the effectivness of using nonparametric techniques to estimate demand elasticities."
