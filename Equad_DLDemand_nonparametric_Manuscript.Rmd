@@ -6,7 +6,7 @@ output:
   pdf_document:
     fig_caption: yes
     number_sections: yes
-    toc: yes
+    toc: no
     toc_depth: 4
   html_document:
     toc: yes
@@ -17,7 +17,19 @@ header-includes:
 - \usepackage{longtable}
 - \usepackage{amssymb,amsmath}
 - \usepackage{dcolumn}
+abstract: "Nonparametric econometric analysis has been a growing field of study over the past few decades. Many new techniques have been developed and evaluated within a theoretical framework. However, despite the rapid growth of theoretical results, nonparametric applied research has lagged considerably. This may be due in part to the advanced mathematical and statistical exposition presented in many nonparametric research papers. It is often difficult for economist, while well trained in advanced mathematical techinques, to fully grasp the significance and translate from purley theoretical results into applied research. Theoretical researchers working within the field of mathematics and statistics often fail to consider applied economic problems and applied economist are not exploring these newly developed theoretical techinques and refining the theory once they have touched real world data. In addition, until recently, nonparametric techniques were substantially more computationally intensive compared to their paramteric counterparts. While the previous statement would seem to imply that nonparametric tecniques have now become computationally less intesive, in reality it is our computer hardware and programing techniques which have improved to the point where nonparametric analysis has become a viable alternative, especially where parametric techniques fall short. These improvemnts in computer hardware have effectivly opened an area of research which, until recently, had remained closed. This paper employs a nonparametric regression analysis within the context of demand theory. Data on prices and quantites of three commodities (meats, dairy products and beans) from the 2006 Ecuadorian consumer expenditure survey will be evaluated to derive Marshallian price and income elasticities. The nonparametric results will be compared with standard parametric demand analysis tools such as the Double Log demand model and the Almost Ideal Demand system to guage the effectivness of using nonparametric techniques to estimate demand elasticities."
 ---
+
+# Introduction
+
+
+
+
+
+
+
+
+\newpage
 
 ```{r House Keeping, echo=FALSE, message=FALSE}
 
