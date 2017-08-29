@@ -28,6 +28,20 @@ bibliography: np_demand_paper.bib
 
 
 
+# Methods and Models
+
+
+
+
+# Results and Discussion
+
+
+
+
+
+# Conclusions
+
+
 
 
 
