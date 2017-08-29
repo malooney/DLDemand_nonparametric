@@ -17,7 +17,10 @@ header-includes:
 - \usepackage{longtable}
 - \usepackage{amssymb,amsmath}
 - \usepackage{dcolumn}
+
 abstract: "Nonparametric econometric analysis has been a growing field of study over the past few decades. Many new techniques have been developed and evaluated within a theoretical framework. However, despite the rapid growth of theoretical results, nonparametric applied research has lagged considerably. This may be due in part to the advanced mathematical and statistical exposition presented in many nonparametric research papers. It is often difficult for economist, while well trained in advanced mathematical techinques, to fully grasp the significance and translate from purley theoretical results into applied research. Theoretical researchers working within the field of mathematics and statistics often fail to consider applied economic problems and applied economist are not exploring these newly developed theoretical techinques and refining the theory once they have touched real world data. In addition, until recently, nonparametric techniques were substantially more computationally intensive compared to their paramteric counterparts. While the previous statement would seem to imply that nonparametric tecniques have now become computationally less intesive, in reality it is our computer hardware and programing techniques which have improved to the point where nonparametric analysis has become a viable alternative, especially where parametric techniques fall short. These improvemnts in computer hardware have effectivly opened an area of research which, until recently, had remained closed. This paper employs a nonparametric regression analysis within the context of demand theory. Data on prices and quantites of three commodities (meats, dairy products and beans) from the 2006 Ecuadorian consumer expenditure survey will be evaluated to derive Marshallian price and income elasticities. The nonparametric results will be compared with standard parametric demand analysis tools such as the Double Log demand model and the Almost Ideal Demand system to guage the effectivness of using nonparametric techniques to estimate demand elasticities."
+
+bibliography: np_demand_paper.bib
 ---
 
 # Introduction
@@ -30,6 +33,8 @@ abstract: "Nonparametric econometric analysis has been a growing field of study 
 
 
 \newpage
+
+# References
 
 ```{r House Keeping, echo=FALSE, message=FALSE}
 
@@ -244,14 +249,14 @@ e3x_np$e32_np <- mean(model_3.np$grad[,2])
 e3x_np$e33_np <- mean(model_3.np$grad[,3])
 e3x_np$eta3_np <- mean(model_3.np$grad[,4])
 
-par(mfrow=c(1,3))
-plot(density(model_1.np$grad[,1]), sub = "Meats - own price elasticity", main= "", xlim=c(-5,5))
-plot(density(model_2.np$grad[,2]), sub = "Dairy - own price elasticity", main= "",xlim=c(-5,5))
-plot(density(model_3.np$grad[,3]), sub = "Pulses - own price elasticity", main= "", xlim=c(-5,5))
-
-plot(density(model_1.np$grad[,4]), sub = "Meats - income elasticity", main= "", xlim=c(-5,5))
-plot(density(model_2.np$grad[,4]), sub = "Dairy - income elasticity", main= "",xlim=c(-5,5))
-plot(density(model_3.np$grad[,4]), sub = "Pulses - income elasticity", main= "", xlim=c(-5,5))
+# par(mfrow=c(1,3))
+# plot(density(model_1.np$grad[,1]), sub = "Meats - own price elasticity", main= "", xlim=c(-5,5))
+# plot(density(model_2.np$grad[,2]), sub = "Dairy - own price elasticity", main= "",xlim=c(-5,5))
+# plot(density(model_3.np$grad[,3]), sub = "Pulses - own price elasticity", main= "", xlim=c(-5,5))
+# 
+# plot(density(model_1.np$grad[,4]), sub = "Meats - income elasticity", main= "", xlim=c(-5,5))
+# plot(density(model_2.np$grad[,4]), sub = "Dairy - income elasticity", main= "",xlim=c(-5,5))
+# plot(density(model_3.np$grad[,4]), sub = "Pulses - income elasticity", main= "", xlim=c(-5,5))
 
 e3x_np_t <- list()
 e3x_np_t$e31_np_t <- mean(model_3.np$grad[,1])/mean(model_3.np$gerr[,1])
@@ -380,11 +385,11 @@ AIDS_elas_M_income_constraint_t_sig_wr2 <- cbind(AIDS_elas_M_income_constraint_t
   
 ```{r Full AIDS Output, echo=FALSE, message=FALSE, results='asis'}
 
-stargazer(exx_par_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Parametric - Double Log Demand Model")
+#stargazer(exx_par_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Parametric - Double Log Demand Model")
 
-stargazer(exx_np_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Nonparametric Regression using Gaussian Kernel")
+#stargazer(exx_np_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Nonparametric Regression using Gaussian Kernel")
 
-stargazer(AIDS_elas_M_income_constraint_t_sig_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Marshallian")
+#stargazer(AIDS_elas_M_income_constraint_t_sig_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Marshallian")
 
 #stargazer(AIDS_a_b_eta, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Alpha, and Beta parameter estimates, Average Budget Shares, and Income Elasticities")
 
