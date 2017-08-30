@@ -26,7 +26,7 @@ geometry: margin = 1.2in
 ---
 
 
-```{r House Keeping, echo=FALSE, message=FALSE}
+```{r House Keeping, echo=FALSE, message=FALSE, cache=TRUE}
 
 rm(list=ls())
 
@@ -50,7 +50,7 @@ source("~/Google Drive/digitalLibrary/*AAEC 6310 Demand and Price Analysis/deman
 
 ```
 
-```{r Import & data manip, echo=FALSE, message=FALSE}
+```{r Import & data manip, echo=FALSE, message=FALSE, cache=TRUE}
 
 Dta <- read.csv("/Users/malooney/Google Drive/digitalLibrary/*Econometrics2/Lab3/protein.csv")
 Dta_sub <- data.frame(obs=1:nrow(Dta))
@@ -78,7 +78,7 @@ Dta_sub_log <- log(Dta_sub[,c(2:7,11)])
 
 ```
 
-```{r Single Equation Model Estimation using Log-Log Functional Form, echo=FALSE, message=FALSE}
+```{r Single Equation Model Estimation using Log-Log Functional Form, echo=FALSE, message=FALSE, cache=TRUE}
 
 # Single Equation Model Estimation using Log-Log Functional Form
 # Estimate Marshallian elasticities - unrestricted
@@ -128,7 +128,7 @@ dimnames(exx_par_wr2) <- list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("m
 
 ```
   
-```{r, echo=FALSE, message=FALSE, fig.height=3}
+```{r, echo=FALSE, message=FALSE, fig.height=3, cache=TRUE}
 
 dld_1_formula <- formula(q1 ~ p1+ p2+ p3+ X)
 dld_2_formula <- formula(q2 ~ p1+ p2+ p3+ X)
@@ -375,24 +375,41 @@ AIDS_elas_M_income_constraint_t_sig_wr2 <- cbind(AIDS_elas_M_income_constraint_t
   
 # Introduction
   
-Emperical demand analysis has been dominated by the use of parametric functional form models since the appearance of the Working-Lesser Model in the 1940's [@Working:1943wb] [@Leser:1963vd]. A 2015 paper by Clements and Gao [@Clements:2015wj] provide a citation count of journal articles related to four popular parametric demand models (Linear Expenditure, Rotterdam, Translog and Almost Ideal Demand). The authors considered multiple time periods over the date range of 1974-2013. Their results clearly show an upward trajectory for all four parametric demand models with the Linear Expenditure and Almost Ideal Demand (AIDS) models having the highest citation counts both in the multiple thousands of citations. This result suggests that parametric demand modeling is still very much a hotly researched area. 
+Emperical demand analysis has been dominated by the use of parametric functional form models since the appearance of the Working-Lesser Model in the 1940's [@Working:1943wb] [@Leser:1963vd]. A 2015 paper by Clements and Gao [@Clements:2015wj] provide a citation count of journal articles related to four popular parametric demand models (Linear Expenditure, Rotterdam, Translog and Almost Ideal Demand). The authors considered multiple time periods over the date range of 1974-2013. Their results clearly show an upward trajectory for all four parametric demand models with the Linear Expenditure and Almost Ideal Demand (AIDS) models having the highest citation counts both in the multiple thousands of citations. This result suggests that parametric demand modeling is still very much a hotly researched area.  
   
-This may be due in part to the advanced mathematical and statistical exposition presented in many nonparametric research papers. It is often difficult for economist, while well trained in advanced mathematical techinques, to fully grasp the significance and translate from purley theoretical results into applied research. Theoretical researchers working within the field of mathematics and statistics often fail to consider applied economic problems and applied economist are not exploring these newly developed theoretical techinques and refining the theory once they have touched real world data. In addition, until recently, nonparametric techniques were substantially more computationally intensive compared to their paramteric counterparts. While the previous statement would seem to imply that nonparametric tecniques have now become computationally less intesive, in reality it is our computer hardware and programing techniques which have improved to the point where nonparametric analysis has become a viable alternative, especially where parametric techniques fall short. These improvemnts in computer hardware have effectivly opened an area of research which, until recently, had remained closed.
-
-
-
-# Methods and Models
+While parametric form models have clearly dominated the research landscape there are other empirical techniques available to evalaute consumer expenditure datasets. The goal of empirical demand analysis is to answer basic questions about consumer behavior and in many cases, use these answers to design and implement policy (government) or imporove some aspect of business design to increase market exposure/profits (private industry). Beyond these practical objectives Hal Varian [@Varian:1982wa] suggests that, given a consumers expenditure dataset the demand analyst should ask four basic questions concerning the consumers behavior,  
   
-```{r, echo=FALSE, message=FALSE, results='asis'}
+> 
+(1) Consistency? Is the observerd data consistent with the utility maximizing model?
+(2) Structure? Is the observed data consistent with a utility function with some special structure?
+(3) Recoverability? How can the underlying utility function be recovered?
+(4) Extrapolation? How can we forecast behavior in other circumstances?
+  
+With these goals in mind economists are constantly refining their tools to improve their estimates of consumer behavior.  
+  
+Nonparametric economic analysis has been a growing field of study over the past few decades. Many new techniques have been developed within a theoretical framework. However, despite the rapid growth of theoretical results, nonparametric applied research has lagged considerably. This may be due in part to the advanced mathematical and statistical exposition presented in many nonparametric research papers. It is often difficult for economist, while well trained in advanced mathematical techinques, to fully grasp the significance and translate from purley theoretical results into applied research. Theoretical researchers working within the field of mathematics and statistics often fail to consider applied economic problems and applied economist are not exploring these newly developed theoretical techinques and refining the theory once they have touched real world data. In addition, until recently, nonparametric techniques were substantially more computationally intensive compared to their paramteric counterparts. While the previous statement would seem to imply that nonparametric tecniques have now become computationally less intesive, in reality it is our computer hardware and programing techniques which have improved to the point where nonparametric analysis has become a viable alternative, especially where parametric techniques fall short. These improvemnts in computer hardware have effectivly opened an area of research which, until recently, had remained closed.  
 
-stargazer(Dta_sub, header=F, type="latex", summary = TRUE, font.size = "small", notes= c("good 1 = meats", "good 2 = dairy", "good 3 = beans"), notes.align= "r", flip = F, float = T, float.env = "table", title="Summary Statistics")
+
+
+
+The single largest potiential issue with using a parametric form model to evaluate consumer demand is the prior imposition of functional form on the demand model. If a demand system is well represented by a functional form and the econometric model is correctly specified with theoretical assumptions met then a parametric estimator is both consistent and effiecient. However, these requirements are excessivly difficult to satisfy when used to gain insight about real world data.
+
+
+
+# Methods and Models  
+  
+
+  
+```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
+
+stargazer(Dta_sub, header=F, type="latex", summary = TRUE, font.size = "small", notes= c("good 1 = meats", "good 2 = dairy", "good 3 = beans"), notes.align= "l", flip = F, float = T, float.env = "table", title="Summary Statistics")
 
 ```
 
 
 # Results and Discussion
   
-```{r, echo=FALSE, message=FALSE, results='asis'}
+```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
 
 stargazer(exx_par_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Parametric - Double Log Demand Model")
 
