@@ -1,5 +1,5 @@
 ---
-title: "Demand Paper"
+title: "Nonparametric Demand Analysis"
 author: "Matthew Aaron Looney"
 date: "08/22/2017"
 output:
@@ -17,14 +17,14 @@ header-includes:
 - \usepackage{longtable}
 - \usepackage{amssymb,amsmath}
 - \usepackage{dcolumn}
+- \usepackage{setspace}\doublespacing
 
-abstract: "Nonparametric econometric analysis has been a growing field of study over the past few decades. Many new techniques have been developed within a theoretical framework. However, despite the rapid growth of theoretical results, nonparametric applied research has lagged considerably. This paper employs a nonparametric regression analysis within the context of demand theory. Data on prices and quantites of three commodities (meats, dairy products and beans) from the 2006 Ecuadorian consumer expenditure survey will be evaluated to derive Marshallian price and income elasticities. The nonparametric results will be compared with standard parametric demand analysis tools such as the Log-Log demand model and the Almost Ideal Demand system to guage the effectivness of using nonparametric techniques to estimate demand elasticities."
+abstract: "Nonparametric econometric analysis has been a growing field of study over the past several decades. Many new techniques have been developed within a theoretical framework. However, despite the rapid growth of theoretical results, nonparametric applied research has lagged considerably. This paper employs a nonparametric regression analysis within the context of demand theory. Data on prices and quantites of three commodities (meats, dairy products and beans) from the 2006 Ecuadorian consumer expenditure survey will be evaluated to derive Marshallian price and income elasticities. The nonparametric results will be compared with standard parametric demand analysis tools such as the Log-Log demand model and the Almost Ideal Demand system to guage the effectivness of using nonparametric techniques to estimate demand elasticities."
 
 bibliography: np_demand_paper.bib
 fontsize: 12pt
 geometry: margin = 1.2in
 ---
-
 
 ```{r House Keeping, echo=FALSE, message=FALSE, cache=TRUE}
 
@@ -387,14 +387,13 @@ While parametric form models have clearly dominated the research landscape there
   
 With these goals in mind economists are constantly refining their tools to improve their estimates of consumer behavior.  
   
-Nonparametric economic analysis has been a growing field of study over the past few decades. Many new techniques have been developed within a theoretical framework. However, despite the rapid growth of theoretical results, nonparametric applied research has lagged considerably. This may be due in part to the advanced mathematical and statistical exposition presented in many nonparametric research papers. It is often difficult for economist, while well trained in advanced mathematical techinques, to fully grasp the significance and translate from purley theoretical results into applied research. Theoretical researchers working within the field of mathematics and statistics often fail to consider applied economic problems and applied economist are not exploring these newly developed theoretical techinques and refining the theory once they have touched real world data. In addition, until recently, nonparametric techniques were substantially more computationally intensive compared to their paramteric counterparts. While the previous statement would seem to imply that nonparametric tecniques have now become computationally less intesive, in reality it is our computer hardware and programing techniques which have improved to the point where nonparametric analysis has become a viable alternative, especially where parametric techniques fall short. These improvemnts in computer hardware have effectivly opened an area of research which, until recently, had remained closed.  
-
-
-
+Nonparametric economic analysis has been a growing field of study over the past several decades. Many new techniques have been developed within a theoretical framework. However, despite the rapid growth of theoretical results, nonparametric applied research has lagged considerably. This may be due in part to the advanced mathematical and statistical exposition presented in many nonparametric research papers. It is often difficult for economist, while well trained in advanced mathematical techinques, to fully grasp the significance and translate from purley theoretical results into applied research. Theoretical researchers working within the field of mathematics and statistics often fail to consider applied economic problems and applied economist are not exploring these newly developed theoretical techinques and refining the theory once they have touched real world data. In addition, until recently, nonparametric techniques were substantially more computationally intensive compared to their paramteric counterparts. While the previous statement would seem to imply that nonparametric tecniques have now become computationally less intesive, in reality it is our computer hardware and programing techniques which have improved to the point where nonparametric analysis has become a viable alternative, especially where parametric techniques fall short. These improvemnts in computer hardware have effectivly opened an area of research which, until recently, had remained closed.  
+  
+Regression analysis is the workhorse technique employed in econometrics. However, in linear regression analysis it is assumed the regressors enter the conditional mean in a linear fashion and each regressor is independent of the other which is often a violation of the data under study. Even when we use nonlinear regression techniques we often still assume we know the functional form for the data generating process (DGP).
 
 The single largest potiential issue with using a parametric form model to evaluate consumer demand is the prior imposition of functional form on the demand model. If a demand system is well represented by a functional form and the econometric model is correctly specified with theoretical assumptions met then a parametric estimator is both consistent and effiecient. However, these requirements are excessivly difficult to satisfy when used to gain insight about real world data.
 
-
+Nonparametric modelling affords many advantages over their parametric counterparts. Primary amoung them is the nonparametric models ability help us uncover a more accurate representation of the unknown function conditioned on the actual data in hand. 
 
 # Methods and Models  
   
