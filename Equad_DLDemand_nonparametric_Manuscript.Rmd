@@ -400,9 +400,17 @@ The single largest potiential issue with using a parametric form model to evalua
   
 Nonparametric modelling affords many advantages over their parametric counterparts. Primary amoung them is the nonparametric models ability to help us uncover a more accurate representation of the unknown function, conditioned on the actual data in hand. In section 2 I will explore the methods and models used to estimate a nonparametric regression. In nonparametric analysis a critical step in acheving a reliable kernel estimator is choosing the correct bandwidth estimator. Some time will be spend exploring several different bandwidth estimators which are prominant in the current literature. I will also explore the two most popular kernel regression methods in current use, Local-Constant Least Squares (LCLS) and Local-Linear Least Squares (LLLS). I will summarize the data and quickly review the parametric models being used for comparison purposes. Section 3 explores the results obtained from the nonparametric kernel regression and compares these results with the parametric form models used on the same dataset. Section 4 concludes and details direction for additional studies.  
 
-# Methods, Models and Data 
+# Methods, Models and Data  
   
-It is well known that a correctly specified parametric model is prefered over nonparametric methods. However, we also know that correct model specification prior to study is a near impossible task. It is important to test the parametric form we would like to employ to assess if the functional form is consistent with the DGP. The test we untilize in this study was developed by Hasiao, Li and Racine and is a test of Consistent Model Specification (CMS-test). [@Hsiao:2007uk]
+In this paper we seek to explore the validity of using nonparametric techniques to uncover estimates of demand elasticities. To this end we use the Log-Log demand system developed by Working [-@Working:1943wb] and Lesser [-@Leser:1963vd]. The benefit of using this type of parametric form is the sheer simplicity of the model. This simplicity allows us to easily compare the effectivness of our nonparametric econometric technique without getting bogged down in complicated estimation considerations or theory constraints. The only theory constraints available to the Log-Log demand model is homogeneity of degree zero in prices and income. However, even though this constraint is available to the Log-Log model we decide to forego all economic theory constraints to make comparability more consistent.  
+  
+Equation 1 shows the Log-Log model specification for the Marshallian own and cross prices elasticities ($e_{ik}$) and the income elasticities ($e_i$). Since we are unable to impose cross equation constraints our study will focus on the own price and income elasticities of this model. While the Hicksian elasticities are of more interest for policy and welfare studies, we focus only on the Marshallian estimates so a direct estimate comparison can be made between the parametric and nonparametric elasticity.  
+  
+\begin{equation} \label{marshal_unrestricted}
+\log ({q_i}) = {\alpha _i} + {e_i}\log (x) + \sum\limits_{k = 1}^n {{e_{ik}}\log ({p_k})} 
+\end{equation}
+  
+It is well known that a correctly specified parametric model is prefered over nonparametric methods. However, we also know that correct model specification prior to study is a near impossible task. It is important to test the parametric model to assess if the functional form is consistent with the DGP. The test we untilize in this study was developed by Hasiao, Li and Racine and is a test of Consistent Model Specification (CMS-test) [@Hsiao:2007uk].
   
 The test developed by Hsiao et al. is a kernel based test which tests for correct specification of the parametric form model. A short review of the details of the test are given below.  
   
@@ -452,13 +460,12 @@ ${\hat J_n} = n{({\hat h_1},...,{\hat h_q})^{1/2}}{\hat I_n}{\hat \Omega ^{ - 1/
   
 According to the authors, it can be easily shown that the $\hat J_n$ test statistic diverges to $+ \infty$ if $H_0$ is false.  
   
-In this paper we seek to explore the validity of using nonparametric techniques to estimate demand elasticities. To this end we use the Log-Log demand system developed by Working [-@Working:1943wb] and Lesser [-@Leser:1963vd]. The benefit of using this type of parametric form is the simplicity of the model allows us to easily compare the effectivness of our econometric technique without getting bogged down in complicated estimation considerations or theory constraints. The only theory constraints available to the Log-Log demand model is homogeneity of degree zero in prices and income
-
+  
 
   
 ```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
 
-stargazer(Dta_sub, header=F, type="latex", summary = TRUE, font.size = "small", notes= c("good 1 = meats", "good 2 = dairy", "good 3 = beans"), notes.align= "l", flip = F, float = T, float.env = "table", title="Summary Statistics")
+#stargazer(Dta_sub, header=F, type="latex", summary = TRUE, font.size = "small", notes= c("good 1 = meats", "good 2 = dairy", "good 3 = beans"), notes.align= "l", flip = F, float = T, float.env = "table", title="Summary Statistics")
 
 ```
 
@@ -467,11 +474,11 @@ stargazer(Dta_sub, header=F, type="latex", summary = TRUE, font.size = "small", 
   
 ```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
 
-stargazer(exx_par_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Parametric - Double Log Demand Model")
+#stargazer(exx_par_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Parametric - Double Log Demand Model")
 
-stargazer(exx_np_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Nonparametric Regression using Gaussian Kernel")
+#stargazer(exx_np_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Nonparametric Regression using Gaussian Kernel")
 
-stargazer(AIDS_elas_M_income_constraint_t_sig_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Marshallian")
+#stargazer(AIDS_elas_M_income_constraint_t_sig_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Marshallian")
 
 #stargazer(AIDS_a_b_eta, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Alpha, and Beta parameter estimates, Average Budget Shares, and Income Elasticities")
 
