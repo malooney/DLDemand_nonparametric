@@ -22,8 +22,10 @@ header-includes:
 abstract: "Nonparametric econometric analysis has been a growing field of study over the past several decades. Many new techniques have been developed within a theoretical framework. However, despite the rapid growth of theoretical results, nonparametric applied research has lagged considerably. This paper employs a nonparametric regression analysis within the context of demand theory. Data on prices and quantites of three commodities (meats, dairy products and beans) from the 2006 Ecuadorian consumer expenditure survey will be evaluated to derive Marshallian price and income elasticities. The nonparametric results will be compared with standard parametric demand analysis tools such as the Log-Log demand model and the Almost Ideal Demand system to guage the effectivness of using nonparametric techniques to estimate demand elasticities."
 
 bibliography: np_demand_paper.bib
+csl: computational-economics.csl
+link-citations: true
 fontsize: 12pt
-geometry: margin = 1.2in
+geometry: margin = 1.25in
 ---
 
 ```{r House Keeping, echo=FALSE, message=FALSE, cache=TRUE}
@@ -239,14 +241,14 @@ e3x_np$e32_np <- mean(model_3.np$grad[,2])
 e3x_np$e33_np <- mean(model_3.np$grad[,3])
 e3x_np$eta3_np <- mean(model_3.np$grad[,4])
 
-# par(mfrow=c(1,3))
-# plot(density(model_1.np$grad[,1]), sub = "Meats - own price elasticity", main= "", xlim=c(-5,5))
-# plot(density(model_2.np$grad[,2]), sub = "Dairy - own price elasticity", main= "",xlim=c(-5,5))
-# plot(density(model_3.np$grad[,3]), sub = "Pulses - own price elasticity", main= "", xlim=c(-5,5))
-# 
-# plot(density(model_1.np$grad[,4]), sub = "Meats - income elasticity", main= "", xlim=c(-5,5))
-# plot(density(model_2.np$grad[,4]), sub = "Dairy - income elasticity", main= "",xlim=c(-5,5))
-# plot(density(model_3.np$grad[,4]), sub = "Pulses - income elasticity", main= "", xlim=c(-5,5))
+par(mfrow=c(1,3))
+plot(density(model_1.np$grad[,1]), sub = "Meats - own price elasticity", main= "", xlim=c(-5,5))
+plot(density(model_2.np$grad[,2]), sub = "Dairy - own price elasticity", main= "",xlim=c(-5,5))
+plot(density(model_3.np$grad[,3]), sub = "Beans - own price elasticity", main= "", xlim=c(-5,5))
+
+plot(density(model_1.np$grad[,4]), sub = "Meats - income elasticity", main= "", xlim=c(-5,5))
+plot(density(model_2.np$grad[,4]), sub = "Dairy - income elasticity", main= "",xlim=c(-5,5))
+plot(density(model_3.np$grad[,4]), sub = "Beans - income elasticity", main= "", xlim=c(-5,5))
 
 e3x_np_t <- list()
 e3x_np_t$e31_np_t <- mean(model_3.np$grad[,1])/mean(model_3.np$gerr[,1])
@@ -435,4 +437,18 @@ stargazer(AIDS_elas_M_income_constraint_t_sig_wr2, header=F, type="latex", summa
 
 \newpage
 
-# References
+# References  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
