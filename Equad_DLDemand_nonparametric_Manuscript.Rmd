@@ -18,6 +18,7 @@ header-includes:
 - \usepackage{amssymb,amsmath}
 - \usepackage{dcolumn}
 - \usepackage{setspace}\doublespacing
+- \usepackage{mathrsfs}
 
 abstract: "Nonparametric econometric analysis has been a growing field of study over the past several decades. Many new techniques have been developed within a theoretical framework. However, despite the rapid growth of theoretical results, nonparametric applied research has lagged considerably. This paper employs a nonparametric regression analysis within the context of demand theory. Data on prices and quantites of three commodities (meats, dairy products and beans) from the 2006 Ecuadorian consumer expenditure survey will be evaluated to derive Marshallian price and income elasticities. The nonparametric results will be compared with standard parametric demand analysis tools such as the Log-Log demand model and the Almost Ideal Demand system to guage the effectivness of using nonparametric techniques to estimate demand elasticities."
 
@@ -395,7 +396,7 @@ Regression analysis is the workhorse technique employed in econometrics. However
   
 The single largest potiential issue with using a parametric form model to evaluate consumer demand is the prior imposition of functional form on the demand model. If a demand system is well represented by a functional form and the econometric model is correctly specified with theoretical assumptions met then a parametric estimator is both consistent and effiecient. In fact if the previous criteria are met parametric regression is superior in just about every way. However, these requirements are excessivly difficult to satisfy when used in the wild to gain insight about real world data and thus the parametric approach can be seroiusly flawed and worst, can lead the researcher to faulty conclusions which can have serious repercussions if used to implement policy.  
   
-Nonparametric modelling affords many advantages over their parametric counterparts. Primary amoung them is the nonparametric models ability to help us uncover a more accurate representation of the unknown function conditioned on the actual data in hand. In section 2 I will explore the methods and models used to estimate a nonparametric regression. In nonparametric analysis a critical step in acheving a reliable kernel estimator is choosing the correct bandwidth estimator. Some time will be spend exploring several different bandwidth estimators which are prominant in the current literature. I will also explore the two most popular kernel regression methods in current use, Local-Constant Least Squares (LCLS) and Local-Linear Least Squares (LLLS). I will summarize the data and quickly review the parametric models being used for comparison purposes. Section 3 explores the results obtained from the nonparametric kernel regression and compares these results with the parametric form models used on the same dataset. Section 4 concludes and details direction for additional studies.  
+Nonparametric modelling affords many advantages over their parametric counterparts. Primary amoung them is the nonparametric models ability to help us uncover a more accurate representation of the unknown function, conditioned on the actual data in hand. In section 2 I will explore the methods and models used to estimate a nonparametric regression. In nonparametric analysis a critical step in acheving a reliable kernel estimator is choosing the correct bandwidth estimator. Some time will be spend exploring several different bandwidth estimators which are prominant in the current literature. I will also explore the two most popular kernel regression methods in current use, Local-Constant Least Squares (LCLS) and Local-Linear Least Squares (LLLS). I will summarize the data and quickly review the parametric models being used for comparison purposes. Section 3 explores the results obtained from the nonparametric kernel regression and compares these results with the parametric form models used on the same dataset. Section 4 concludes and details direction for additional studies.  
 
 # Methods, Models and Data 
   
@@ -404,8 +405,11 @@ Nonparametric modelling affords many advantages over their parametric counterpar
 Consistent Model Specification Test [@Hsiao:2007uk]
 A kernel based test which tests for correct specification of the parametric form
 
-
-
+The null hypothesis is given by,  
+${H_0}:P[E({y_i}|{x_i}) = m({x_i},\beta )] = 1{\text{ for some }}\beta  \in \mathscr{B}$  
+  
+where,  
+  
 
 
 
