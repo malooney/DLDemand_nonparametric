@@ -241,14 +241,14 @@ e3x_np$e32_np <- mean(model_3.np$grad[,2])
 e3x_np$e33_np <- mean(model_3.np$grad[,3])
 e3x_np$eta3_np <- mean(model_3.np$grad[,4])
 
-par(mfrow=c(1,3))
-plot(density(model_1.np$grad[,1]), sub = "Meats - own price elasticity", main= "", xlim=c(-5,5))
-plot(density(model_2.np$grad[,2]), sub = "Dairy - own price elasticity", main= "",xlim=c(-5,5))
-plot(density(model_3.np$grad[,3]), sub = "Beans - own price elasticity", main= "", xlim=c(-5,5))
-
-plot(density(model_1.np$grad[,4]), sub = "Meats - income elasticity", main= "", xlim=c(-5,5))
-plot(density(model_2.np$grad[,4]), sub = "Dairy - income elasticity", main= "",xlim=c(-5,5))
-plot(density(model_3.np$grad[,4]), sub = "Beans - income elasticity", main= "", xlim=c(-5,5))
+# par(mfrow=c(1,3))
+# plot(density(model_1.np$grad[,1]), sub = "Meats - own price elasticity", main= "", xlim=c(-5,5))
+# plot(density(model_2.np$grad[,2]), sub = "Dairy - own price elasticity", main= "",xlim=c(-5,5))
+# plot(density(model_3.np$grad[,3]), sub = "Beans - own price elasticity", main= "", xlim=c(-5,5))
+# 
+# plot(density(model_1.np$grad[,4]), sub = "Meats - income elasticity", main= "", xlim=c(-5,5))
+# plot(density(model_2.np$grad[,4]), sub = "Dairy - income elasticity", main= "",xlim=c(-5,5))
+# plot(density(model_3.np$grad[,4]), sub = "Beans - income elasticity", main= "", xlim=c(-5,5))
 
 e3x_np_t <- list()
 e3x_np_t$e31_np_t <- mean(model_3.np$grad[,1])/mean(model_3.np$gerr[,1])
@@ -395,10 +395,23 @@ Regression analysis is the workhorse technique employed in econometrics. However
   
 The single largest potiential issue with using a parametric form model to evaluate consumer demand is the prior imposition of functional form on the demand model. If a demand system is well represented by a functional form and the econometric model is correctly specified with theoretical assumptions met then a parametric estimator is both consistent and effiecient. In fact if the previous criteria are met parametric regression is superior in just about every way. However, these requirements are excessivly difficult to satisfy when used in the wild to gain insight about real world data and thus the parametric approach can be seroiusly flawed and worst, can lead the researcher to faulty conclusions which can have serious repercussions if used to implement policy.  
   
-Nonparametric modelling affords many advantages over their parametric counterparts. Primary amoung them is the nonparametric models ability to help us uncover a more accurate representation of the unknown function conditioned on the actual data in hand. In section 2 I will explore the methods and models used to estimate a nonparametric regression. In nonparametric analysis the critical step to success is choosing a correct bandwidth estimator so some time will be spend exploring several optional available. I will also explore the two most popular kernel regression methods in current use, Local Constant Least Squares (LCLS) and Local Linear Least Squares (LLLS). I will summarize the data and quickly review the parametric models being used for comparison purposes. Section 3 explores the results obtained from the nonparametric kernel regression and compares these results with the parametric form models used on the same dataset. Section 4 concludes and details direction for additional studies.  
+Nonparametric modelling affords many advantages over their parametric counterparts. Primary amoung them is the nonparametric models ability to help us uncover a more accurate representation of the unknown function conditioned on the actual data in hand. In section 2 I will explore the methods and models used to estimate a nonparametric regression. In nonparametric analysis a critical step in acheving a reliable kernel estimator is choosing the correct bandwidth estimator. Some time will be spend exploring several different bandwidth estimators which are prominant in the current literature. I will also explore the two most popular kernel regression methods in current use, Local-Constant Least Squares (LCLS) and Local-Linear Least Squares (LLLS). I will summarize the data and quickly review the parametric models being used for comparison purposes. Section 3 explores the results obtained from the nonparametric kernel regression and compares these results with the parametric form models used on the same dataset. Section 4 concludes and details direction for additional studies.  
 
 # Methods, Models and Data 
   
+
+
+Consistent Model Specification Test [@Hsiao:2007uk]
+A kernel based test which tests for correct specification of the parametric form
+
+
+
+
+
+
+
+
+
 
 
 
