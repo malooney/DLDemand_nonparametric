@@ -402,12 +402,10 @@ Nonparametric modelling affords many advantages over their parametric counterpar
 
 # Methods, Models and Data 
   
-
-
-Consistent Model Specification Test [@Hsiao:2007uk]  
+It is well known that a correctly specified parametric model is prefered over nonparametric methods. However, we also know that correct model specification prior to study is a near impossible task. It is important to test the parametric form we would like to employ to assess if the functional form is consistent with the DGP. The test we untilize in this study was developed by Hasiao, Li and Racine and is a test of Consistent Model Specification (CMS-test). [@Hsiao:2007uk]
   
-A kernel based test which tests for correct specification of the parametric form
-
+The test developed by Hsiao et al. is a kernel based test which tests for correct specification of the parametric form model. A short review of the details of the test are given below.  
+  
 The null hypothesis is given by,  
   
 ${H_0}:P[E({y_i}|{x_i}) = m({x_i},\beta )] = 1{\text{ for some }}\beta  \in \mathscr{B}$  
@@ -438,7 +436,7 @@ $\beta$ is a $\sqrt(n)$-consistent estimator of $\beta$ under $H_0$.
   
 Hsiao et al. [-@Hsiao:2007uk] advocate for the use of cross-validation methods for selecting the kernel smoothing paramater vectors, which is the approach we took in this analysis. Under assumptions (A1)-(A3) of thier paper we can obtain the CV-based test with the new test statistic ${\hat J_n}$:  
   
-$n{({\hat h_1},...,{\hat h_q})^{1/2}}{\hat I_n} \to N(0,\Omega )$ in distribution un $H_0$,  
+$n{({\hat h_1},...,{\hat h_q})^{1/2}}{\hat I_n} \to N(0,\Omega )$ in distribution under $H_0$,  
   
 where,  
   
@@ -452,9 +450,9 @@ Which gives the CV-based test statistic as,
   
 ${\hat J_n} = n{({\hat h_1},...,{\hat h_q})^{1/2}}{\hat I_n}{\hat \Omega ^{ - 1/2}} \to N(0,1)$ in distribution under $H_0$.  
   
-According to the authors, it can be easily shown that the $\hat J_n$ test statistic diverges to $+ \infty$ if $H_0$ is false.
-
-
+According to the authors, it can be easily shown that the $\hat J_n$ test statistic diverges to $+ \infty$ if $H_0$ is false.  
+  
+In this paper we seek to explore the validity of using nonparametric techniques to estimate demand elasticities. To this end we use the Log-Log demand system developed by Working [-@Working:1943wb] and Lesser [-@Leser:1963vd]. The benefit of using this type of parametric form is the simplicity of the model allows us to easily compare the effectivness of our econometric technique without getting bogged down in complicated estimation considerations or theory constraints. The only theory constraints available to the Log-Log demand model is homogeneity of degree zero in prices and income
 
 
   
