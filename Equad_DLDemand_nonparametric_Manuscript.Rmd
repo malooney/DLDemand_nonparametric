@@ -376,6 +376,8 @@ AIDS_elas_M_income_constraint_t_sig_wr2 <- cbind(AIDS_elas_M_income_constraint_t
 
 ```
   
+\newpage
+  
 # Introduction
   
 Emperical demand analysis has been dominated by the use of parametric functional form models since the appearance of the Working-Lesser Model in the 1940's [@Working:1943wb] [@Leser:1963vd]. A 2015 paper by Clements and Gao [@Clements:2015wj] provide a citation count of journal articles related to four popular parametric demand models (Linear Expenditure, Rotterdam, Translog and Almost Ideal Demand). The authors considered multiple time periods over the date range of 1974-2013. Their results clearly show an upward trajectory for all four parametric demand models with the Linear Expenditure and Almost Ideal Demand (AIDS) models having the highest citation counts, both in the multiple thousands of citations. This result suggests that parametric demand modeling is still very much a hotly researched area.  
@@ -402,21 +404,55 @@ Nonparametric modelling affords many advantages over their parametric counterpar
   
 
 
-Consistent Model Specification Test [@Hsiao:2007uk]
+Consistent Model Specification Test [@Hsiao:2007uk]  
+  
 A kernel based test which tests for correct specification of the parametric form
 
 The null hypothesis is given by,  
+  
 ${H_0}:P[E({y_i}|{x_i}) = m({x_i},\beta )] = 1{\text{ for some }}\beta  \in \mathscr{B}$  
   
 where,  
   
-
-
-
-
-
-
-
+$m( \cdot , \cdot )$ is a known function with $\beta$ being a $p \times 1$ vecotr of unknown paramaters,  
+  
+$\mathscr{B}$ is a compact subset in ${\mathbb{R}^p}$.  
+  
+The alternative hypothesis is given by,  
+  
+${H_1}:P[E({y_i}|{x_i}) = m({x_i},\beta )] < 1{\text{ for all }}\beta  \in \mathscr{B}$
+  
+The test statistic was originally developed by Fan and Li [-@Fan:1996wr]  and Zheng [-@JohnXuZheng:1996uo].  
+  
+The test statistic is given by,  
+  
+${I_n} = \frac{1}{{{n^2}}}\sum\limits_i^{} {\sum\limits_{j \ne i}^{} {{{\hat u}_i}} } {\hat u_j}{K_{\gamma {j_{ij}}}}$
+  
+where,  
+  
+${K_{\gamma {j_{ij}}}} = {W_{h,ij}}{L_{\lambda ,ij}}(\gamma  = (h,\lambda ))$,  
+  
+${\hat u_i} = {y_i} - m({x_i},\hat \beta )$ is the parametric null model's residual,  
+  
+$\beta$ is a $\sqrt(n)$-consistent estimator of $\beta$ under $H_0$.  
+  
+Hsiao et al. [-@Hsiao:2007uk] advocate for the use of cross-validation methods for selecting the kernel smoothing paramater vectors, which is the approach we took in this analysis. Under assumptions (A1)-(A3) of thier paper we can obtain the CV-based test with the new test statistic ${\hat J_n}$:  
+  
+$n{({\hat h_1},...,{\hat h_q})^{1/2}}{\hat I_n} \to N(0,\Omega )$ in distribution un $H_0$,  
+  
+where,  
+  
+$\Omega  = 2E\left[ {{\sigma ^4}({x_i})f({x_i})} \right]\left[ {\int {{W^2}(v)dv} } \right]$  
+  
+A consistent estimator of $\Omega$ is given by,  
+  
+$\hat \Omega  = {n^{ - 2}}2({\hat h_1},...,{\hat h_q})\sum\limits_i^{} {\sum\limits_{j \ne i}^{} {\hat u_i^2} } \hat u_j^2W_{\hat h,ij}^2L_{\hat \lambda ,ij}^2$  
+  
+Which gives the CV-based test statistic as,  
+  
+${\hat J_n} = n{({\hat h_1},...,{\hat h_q})^{1/2}}{\hat I_n}{\hat \Omega ^{ - 1/2}} \to N(0,1)$ in distribution under $H_0$.  
+  
+According to the authors, it can be easily shown that the $\hat J_n$ test statistic diverges to $+ \infty$ if $H_0$ is false.
 
 
 
