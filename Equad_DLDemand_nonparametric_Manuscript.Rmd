@@ -412,7 +412,7 @@ Equation 1 shows the Log-Log model specification for the Marshallian own and cro
   
 It is well known that a correctly specified parametric model is prefered over nonparametric methods. However, we also know that correct model specification prior to study is a near impossible task. It is important to test the parametric model to assess if the functional form is consistent with the DGP. The test we untilize in this study was developed by Hasiao, Li and Racine and is a test of Consistent Model Specification (CMS-test) [@Hsiao:2007uk].
   
-The test developed by Hsiao et al. is a kernel based test which tests for correct specification of the parametric form model. A short review of the details of the test are given below.  
+The CMS-test is a kernel based evaluation which tests for correct specification of the parametric form model. A short review of the details of the test are given below.  
   
 The null hypothesis is given by,  
   
