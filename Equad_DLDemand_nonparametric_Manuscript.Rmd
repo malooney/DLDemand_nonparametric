@@ -400,9 +400,11 @@ The single largest potiential issue with using a parametric form model to evalua
   
 Nonparametric modelling affords many advantages over their parametric counterparts. Primary amoung them is the nonparametric models ability to help us uncover a more accurate representation of the unknown function, conditioned on the actual data in hand. In section 2 I will explore the methods and models used to estimate a nonparametric regression. In nonparametric analysis a critical step in acheving a reliable kernel estimator is choosing the correct bandwidth estimator. Some time will be spend exploring several different bandwidth estimators which are prominant in the current literature. I will also explore the two most popular kernel regression methods in current use, Local-Constant Least Squares (LCLS) and Local-Linear Least Squares (LLLS). I will summarize the data and quickly review the parametric models being used for comparison purposes. Section 3 explores the results obtained from the nonparametric kernel regression and compares these results with the parametric form models used on the same dataset. Section 4 concludes and details direction for additional studies.  
 
-# Methods, Models and Data  
+# Models, Methods, and Data  
   
 In this paper we seek to explore the validity of using nonparametric techniques to uncover estimates of demand elasticities. To this end we use the Log-Log demand system developed by Working [-@Working:1943wb] and Lesser [-@Leser:1963vd]. The benefit of using this type of parametric form is the sheer simplicity of the model. This simplicity allows us to easily compare the effectivness of our nonparametric econometric technique without getting bogged down in complicated estimation considerations or theory constraints. The only theory constraints available to the Log-Log demand model is homogeneity of degree zero in prices and income. However, even though this constraint is available to the Log-Log model we decide to forego all economic theory constraints to make comparability more consistent.  
+  
+## Log-Log model  
   
 Equation 1 shows the Log-Log model specification for the Marshallian own and cross prices elasticities ($e_{ik}$) and the income elasticities ($e_i$). Since we are unable to impose cross equation constraints our study will focus on the own price and income elasticities of this model. While the Hicksian elasticities are of more interest for policy and welfare studies, we focus only on the Marshallian estimates so a direct estimate comparison can be made between the parametric and nonparametric elasticity.  
   
@@ -411,6 +413,8 @@ Equation 1 shows the Log-Log model specification for the Marshallian own and cro
 \end{equation}
   
 It is well known that a correctly specified parametric model is prefered over nonparametric methods. However, we also know that correct model specification prior to study is a near impossible task. It is important to test the parametric model to assess if the functional form is consistent with the DGP. The test we untilize in this study was developed by Hasiao, Li and Racine and is a test of Consistent Model Specification (CMS-test) [@Hsiao:2007uk].
+  
+## Consistent Model Specification Test  
   
 The CMS-test is a kernel based evaluation which tests for correct specification of the parametric form model. A short review of the details of the test are given below.  
   
@@ -460,31 +464,123 @@ ${\hat J_n} = n{({\hat h_1},...,{\hat h_q})^{1/2}}{\hat I_n}{\hat \Omega ^{ - 1/
   
 According to the authors, it can be easily shown that the $\hat J_n$ test statistic diverges to $+ \infty$ if $H_0$ is false.  
   
-The primacy of proper bandwidth selection methods in nonparametric analysis is reviewed, however, for a more detailed discussion see [@Cheng:1997vy], [@Hall:2007vq], [@Hurvich:1998wi], [@li2007nonparametric], [@Racine:2004tua], 
+## Bandwidth Selection models  
+  
+The importance of proper bandwidth selection in nonparametric analysis is reviewed here. However, for a more detailed discussion of the methods and theory used in this paper see the excellent work by the following authors: Cheng et al.[-@Cheng:1997vy], Hall et al.[-@Hall:2007vq], Hurvich et al.[-@Hurvich:1998wi], Li and Racine[-@li2007nonparametric], Racine and Li[-@Racine:2004tua], and Li and Racine[-@Li:2004tn].  
+  
+The most popular methods for bandwith selection in applied research are data driven, and of the data driven methods Least-Squares Cross Validation (LSCV) and expected Kullback-Leibler cross-validation also know in the literature as Akaike Information Criterion Cross Validation (aic-CV), are the two used in this paper to evaluate the valididty of using nonparametric techniques to uncover demand elasticities.  
+  
+### Least-Squares Cross Validation (LSCV)  
+  
+While there are many methods to determine an optimal bandwidth, the most commonly used in the current literature is the cross-validation method of LSCV which is defined as:  
+  
+\begin{equation}
+LSCV(h) = {\sum\limits_{i = 1}^n {\left[ {{y_i} - {{\hat m}_{ - 1}} - ({{\text{x}}_i})} \right]} ^2}
+\end{equation}
+  
+where,  
+  
+${\hat m_{ - 1}} - ({{\text{x}}_i})$ is the leave-one-out estimator defined by Li and Racine[-@Li:2004tn] as,  
+  
+\begin{equation}
+{\hat m_{ - 1}} - ({{\text{x}}_i}) = \frac{{\sum\limits_{\scriptstyle j \ne i \hfill \atop 
+  \scriptstyle j = 1 \hfill} ^n {{y_h}({{\text{x}}_i},{{\text{x}}_j})} }}{{\sum\limits_{\scriptstyle j \ne i \hfill \atop 
+  \scriptstyle j = 1 \hfill} ^n {{k_h}({{\text{x}}_i},{{\text{x}}_j})} }}
+\end{equation}  
+  
+An examination of equation 2 reveals that our algorithm will require $n^2$ calculations. Several authors have suggested a derevation of the LSCV that side-steps this issue; we have decided to use the classic formuala as defined in the original paper by Li and Racine[-@Li:2004tn]. It should be noted however, as the data sample grows, the calculations become computationally burdensome.  
+  
+Gaining in popularity is a cross-validation bandwidth selection method developed by Hurvich et al.[-@Hurvich:1998wi] called Akaike Information Criterion Cross Validation (aic-CV). This method is similar to Kullback-Leibler information criterion method which is the foundation for density estimation using likelihood cross-validation. However, the true benefit of using the aic-CV method is the property of reduced variability the tendancy for this method to undersmooth.  
+  
+### Akaike Information Criterion Cross Validation (aic-CV)  
+  
+The aic-CV method is defined as:  
+  
+\begin{equation}
+AI{C_c}(h) = \ln ({\hat \sigma ^2}) + \frac{{1 + p/n}}{{1 - (p + 2)/n}} = \ln ({\hat \sigma ^2}) + 1 + \frac{{2(p + 1)}}{{n - p - 2}}
+\end{equation}
+  
+where,  
+  
+$AIC_C$ is the bias corrected version,  
+  
+$\hat \sigma^2$ is the estimated error variance,  
+  
+p is the number of regression (or autoregressive) paramaters in the model.  
+  
+which gives the following formula for smoothing paramter selction:  
+  
+\begin{equation}
+AI{C_c}(h) = \ln ({\hat \sigma ^2}) + \frac{{1 + tr(H)/n}}{{1 - \{ tr(H) + 2\} /n}} = \ln ({\hat \sigma ^2}) + 1 + \frac{{2(tr(H) + 1)}}{{n - tr(H) - 2}}
+\end{equation}
+  
+where,  
+  
+${\hat \sigma ^2} = {n^{ - 1}}{\sum\limits_{i = 1}^n {\left[ {{y_i} - \hat m({{\text{x}}_i})} \right]} ^2}$,  
+  
+and H is called the hat matrix or smoother matrix defined by:  
+  
+\[H = \left[ {\begin{array}{*{20}{c}}
+  {\frac{{K({{\text{x}}_1}{\text{,}}{{\text{x}}_1})}}{{\hat f({{\text{x}}_1})}}}&{\frac{{K({{\text{x}}_1}{\text{,}}{{\text{x}}_1})}}{{\hat f({{\text{x}}_1})}}}& \vdots &{\frac{{K({{\text{x}}_1}{\text{,}}{{\text{x}}_n})}}{{\hat f({{\text{x}}_1})}}} \\ 
+  {\frac{{K({{\text{x}}_2}{\text{,}}{{\text{x}}_1})}}{{\hat f({{\text{x}}_2})}}}&{\frac{{K({{\text{x}}_2}{\text{,}}{{\text{x}}_2})}}{{\hat f({{\text{x}}_2})}}}& \vdots &{\frac{{K({{\text{x}}_2}{\text{,}}{{\text{x}}_n})}}{{\hat f({{\text{x}}_2})}}} \\ 
+   \vdots & \vdots & \ddots & \vdots  \\ 
+  {\frac{{K({{\text{x}}_n}{\text{,}}{{\text{x}}_1})}}{{\hat f({{\text{x}}_n})}}}&{\frac{{K({{\text{x}}_n}{\text{,}}{{\text{x}}_2})}}{{\hat f({{\text{x}}_n})}}}& \cdots &{\frac{{K({{\text{x}}_n}{\text{,}}{{\text{x}}_n})}}{{\hat f({{\text{x}}_n})}}} 
+\end{array}} \right]\]
+  
+The trace of the H matrix should be thought of as a measure of the number of paramaters in the nonparametric model [@Hastie:1993vz].  
+  
+## Nonparametric Regression models  
+  
+While the method of bandwidth selection is critical, the end game of this analysis is to use the bandwidth estimator in a regression analysis to evaluate a comparison between elasticities derived from a paramertic model estimated under Least Squares versus elasticities derived from nonparamtertic regression methods. With this goal in mind we now explore nonparamteric regression methods.  
+  
+## Local-Constant Least Squares (LCLS)  
+  
+The first nonparametric regression model developed was the LCLS by [@Nadaraya:1964de] and [@Watson:1964vz]
 
+
+
+
+
+
+
+## Local-Linear Least Squares (LLLS)  
+  
+  
+  
+  
+  
+  
   
 ```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
 
-#stargazer(Dta_sub, header=F, type="latex", summary = TRUE, font.size = "small", notes= c("good 1 = meats", "good 2 = dairy", "good 3 = beans"), notes.align= "l", flip = F, float = T, float.env = "table", title="Summary Statistics")
+stargazer(Dta_sub, header=F, type="latex", summary = TRUE, font.size = "small", notes= c("good 1 = meats", "good 2 = dairy", "good 3 = beans"), notes.align= "l", flip = F, float = T, float.env = "table", title="Summary Statistics")
 
 ```
-
-
-# Results and Discussion
+  
+# Results and Discussion  
   
 ```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
 
-#stargazer(exx_par_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Parametric - Double Log Demand Model")
+stargazer(exx_par_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Parametric - Double Log Demand Model")
 
-#stargazer(exx_np_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Nonparametric Regression using Gaussian Kernel")
+stargazer(exx_np_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Nonparametric Regression using Gaussian Kernel")
 
-#stargazer(AIDS_elas_M_income_constraint_t_sig_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Marshallian")
-
-#stargazer(AIDS_a_b_eta, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Alpha, and Beta parameter estimates, Average Budget Shares, and Income Elasticities")
+stargazer(AIDS_elas_M_income_constraint_t_sig_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Marshallian")
 
 ```
   
+```{r, echo=FALSE, message=FALSE, results='asis', fig.height=3, cache=TRUE}
 
+par(mfrow=c(1,3))
+plot(density(model_1.np$grad[,1]), sub = "Meats - own price elasticity", main= "", xlim=c(-5,5))
+plot(density(model_2.np$grad[,2]), sub = "Dairy - own price elasticity", main= "",xlim=c(-5,5))
+plot(density(model_3.np$grad[,3]), sub = "Beans - own price elasticity", main= "", xlim=c(-5,5))
+
+plot(density(model_1.np$grad[,4]), sub = "Meats - income elasticity", main= "", xlim=c(-5,5))
+plot(density(model_2.np$grad[,4]), sub = "Dairy - income elasticity", main= "",xlim=c(-5,5))
+plot(density(model_3.np$grad[,4]), sub = "Beans - income elasticity", main= "", xlim=c(-5,5))
+
+```
 
 # Conclusions
   
