@@ -442,7 +442,7 @@ ${\hat u_i} = {y_i} - m({x_i},\hat \beta )$ is the parametric null model's resid
   
 $\beta$ is a $\sqrt(n)$-consistent estimator of $\beta$ under $H_0$.  
   
-Hsiao et al. [-@Hsiao:2007uk] advocate for the use of cross-validation methods for selecting the kernel smoothing paramater vectors, which is the approach we took in this analysis. Under assumptions (A1)-(A3) of thier paper we can obtain the CV-based test with the new test statistic ${\hat J_n}$:  
+Hsiao et al. [-@Hsiao:2007uk] advocate for the use of cross-validation methods for selecting the kernel smoothing paramater vectors, which is the approach we took in this analysis. Under assumptions (A1)-(A3) of thier paper we can obtain the cross-validation based (CV-based) test with the new test statistic ${\hat J_n}$:  
   
 $n{({\hat h_1},...,{\hat h_q})^{1/2}}{\hat I_n} \to N(0,\Omega )$ in distribution under $H_0$,  
   
@@ -460,7 +460,7 @@ ${\hat J_n} = n{({\hat h_1},...,{\hat h_q})^{1/2}}{\hat I_n}{\hat \Omega ^{ - 1/
   
 According to the authors, it can be easily shown that the $\hat J_n$ test statistic diverges to $+ \infty$ if $H_0$ is false.  
   
-  
+The primacy of proper bandwidth selection methods in nonparametric analysis is reviewed, however, for a more detailed discussion see [@Cheng:1997vy], [@Hall:2007vq], [@Hurvich:1998wi], [@li2007nonparametric], [@Racine:2004tua], 
 
   
 ```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
