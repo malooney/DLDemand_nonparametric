@@ -1,5 +1,6 @@
 ---
 title: "Nonparametric Demand Analysis"
+subtitle: "Draft - not for publication"
 author: "Matthew Aaron Looney"
 date: "08/22/2017"
 output:
@@ -19,6 +20,7 @@ header-includes:
 - \usepackage{dcolumn}
 - \usepackage{setspace}\doublespacing
 - \usepackage{mathrsfs}
+- \usepackage{eso-pic,graphicx,transparent}
 
 abstract: "Nonparametric econometric analysis has been a growing field of study over the past several decades. Many new techniques have been developed within a theoretical framework. However, despite the rapid growth of theoretical results, nonparametric applied research has lagged considerably. This paper employs a nonparametric regression analysis within the context of demand theory. Data on prices and quantites of three commodities (meats, dairy products and beans) from the 2006 Ecuadorian consumer expenditure survey will be evaluated to derive Marshallian price and income elasticities. The nonparametric results will be compared with standard parametric demand analysis tools such as the Log-Log demand model and the Almost Ideal Demand system to guage the effectivness of using nonparametric techniques to estimate demand elasticities."
 
@@ -28,6 +30,14 @@ link-citations: true
 fontsize: 12pt
 geometry: margin = 1.25in
 ---
+
+<!-- \AddToShipoutPictureFG{ -->
+<!--   \AtPageCenter{% or \AtTextCenter -->
+<!--     \makebox[0pt]{\rotatebox[origin=c]{45}{% -->
+<!--       \scalebox{5}{\texttransparent{0.1}{DRAFT}}% -->
+<!--     }} -->
+<!--   } -->
+<!-- } -->
 
 ```{r House Keeping, echo=FALSE, message=FALSE, cache=TRUE}
 
@@ -533,23 +543,59 @@ The trace of the H matrix should be thought of as a measure of the number of par
   
 While the method of bandwidth selection is critical, the end game of this analysis is to use the bandwidth estimator in a regression analysis to evaluate a comparison between elasticities derived from a paramertic model estimated under Least Squares versus elasticities derived from nonparamtertic regression methods. With this goal in mind we now explore nonparamteric regression methods.  
   
-## Local-Constant Least Squares (LCLS)  
+### Local-Constant Least Squares (LCLS)  
   
-The first nonparametric regression model developed was the LCLS by [@Nadaraya:1964de] and [@Watson:1964vz]
+The LCLS regression was the first nonparametric regression model developed and is sometimes refered to as the Nadaraya–Watson estimator after Nadaraya [-@Nadaraya:1964de] and Watson [-@Watson:1964vz]. This method minimizes the kernel weighted least-squres regression of $y_i$ on a constant $c$. If we assume some function $g$ s.t. $y_i=g(x_i)+\epsilon_i$ then our objective with LCLS is to approximate $g(\cdot)$ with a constant $c$. More formally the LCLS can be defined as:  
+  
+\begin{equation}
+LCLS(y;{\text{x}}) = \frac{1}{{n{h_y}|{\text{h}}|}}\sum\limits_{i = 1}^n k \left( {\frac{{{y_i} - y}}{{{h_y}}}} \right){K_h}({{\text{x}}_i}{\text{,x}})
+\end{equation}
+  
+where,  
+  
+${K_h}({{\text{x}}_i}{\text{,x}})$ is the product kernel.
+
+\begin{equation}
+a = \arg \min \left\{ {\hat m({\text{x}})} \right\} = \frac{{\sum\limits_{i = 1}^n {{K_h}({{\text{x}}_i}{\text{,x}}){y_i}} }}{{\sum\limits_{i = 1}^n {{K_h}({{\text{x}}_i}{\text{,x}})} }}
+\end{equation}
+  
+where $a$ can be thought of as our constant $c$ which approximates $g(\cdot)$.  
+  
+The above estimator can be represented in matrix form as:  
+  
+$$\hat m({\text{x}}) = {(I'K({\text{x}})I)^{ - 1}}I'K({\text{x}})y$$
+  
+where,  
+  
+$I$ is the identity matrix of dimension $n \times 1$,  
+  
+and $K({\text{x}})$ is the same product kernel from equation 6,  
+  
+$$K({\text{x}}) = \left[ {\begin{array}{*{20}{c}}
+  {{K_h}({{\text{x}}_1}{\text{,x}})}&0&0&0 \\ 
+  0&{{K_h}({{\text{x}}_2}{\text{,x}})}&0&0 \\ 
+  0&0& \ddots &0 \\ 
+  0&0&0&{{K_h}({{\text{x}}_n}{\text{,x}})} 
+\end{array}} \right]$$
+  
+One of the problems with the LCLS estimator is that it is bias. This may not be of concern depending on the circumstances but it should be noted.
 
 
 
-
-
-
-
-## Local-Linear Least Squares (LLLS)  
+### Local-Linear Least Squares (LLLS)  
+  
+The LLLS estimator has been growing in popularity as an alternative to the LCLS method. In addition to increasing use in applied research the LLLS estimator has been dominated the theoretical literature.  
+  
+Conceptually, the LLLS estimator is similar to the LCLS with the exception that instead of fitting a constant to our left hand side variable we now consider fitting a locally defined line. This allows us to more accuratly model the data and is especially useful when we have outliers and nonlinear relationships in our data.  
+  
+We can think of our local-linear fitting as a local Taylor Series expansion at some point \textbf{x}. In other words, for the relationship $y=m(x)+u$, we have paired data on $(y_1,x_1), (y_2,x_2), ..., (y_n,x_n)$. This allows us to take a local Taylor approximation for each of the points \textbf{x}. It now become clear, with locally fitting with kernel weighting, problematic data (outliers, nonlinearity) can be betetr modeled by LLLS.  
+  
+The LLLS estimator as developed and defined by Li and Racine [-@Li:2004tn] is given as follows:  
   
   
+## Methods  
   
-  
-  
-  
+## Data  
   
 ```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
 
