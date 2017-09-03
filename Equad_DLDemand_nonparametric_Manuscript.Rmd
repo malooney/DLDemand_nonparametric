@@ -563,11 +563,11 @@ where $a$ can be thought of as our constant $c$ which approximates $g(\cdot)$.
   
 The above estimator can be represented in matrix form as:  
   
-$$\hat m({\text{x}}) = {(I'K({\text{x}})I)^{ - 1}}I'K({\text{x}})y$$
+$$\hat m({\text{x}}) = {(\textbf{i}'K({\text{x}})\textbf{i})^{ - 1}}\textbf{i}'K({\text{x}})y$$
   
 where,  
   
-$I$ is the identity matrix of dimension $n \times 1$,  
+$\textbf{i}$ is the identity matrix of dimension $n \times 1$,  
   
 and $K({\text{x}})$ is the same product kernel from equation 6,  
   
@@ -586,11 +586,80 @@ One of the problems with the LCLS estimator is that it is bias. This may not be 
   
 The LLLS estimator has been growing in popularity as an alternative to the LCLS method. In addition to increasing use in applied research the LLLS estimator has been dominated the theoretical literature.  
   
-Conceptually, the LLLS estimator is similar to the LCLS with the exception that instead of fitting a constant to our left hand side variable we now consider fitting a locally defined line. This allows us to more accuratly model the data and is especially useful when we have outliers and nonlinear relationships in our data.  
+Conceptually, the LLLS estimator is similar to the LCLS with the exception that instead of fitting a constant to our left hand side variable we now consider fitting a locally defined line segment. This allows us to more accuratly model the data and is especially useful when we have outliers and nonlinear relationships in our data.  
   
 We can think of our local-linear fitting as a local Taylor Series expansion at some point \textbf{x}. In other words, for the relationship $y=m(x)+u$, we have paired data on $(y_1,x_1), (y_2,x_2), ..., (y_n,x_n)$. This allows us to take a local Taylor approximation for each of the points \textbf{x}. It now become clear, with locally fitting with kernel weighting, problematic data (outliers, nonlinearity) can be betetr modeled by LLLS.  
   
 The LLLS estimator as developed and defined by Li and Racine [-@Li:2004tn] is given as follows:  
+  
+We begin with a Taylor expansion of \textbf{x} for every observation $i$ as,  
+  
+$${y_i} = m({x_i}) + {u_i} \approx m(x) + ({x_i} - x)\beta (x) + {u_i}$$  
+  
+where,  
+  
+$(x_i-x)$ is a $1 \times q$ vector and $\beta(x)$ is the gradient vector of dimension $q$.  
+  
+then,  
+  
+$${y_i} = \alpha  + ({x_i} - x)b + {u_i} = \left[ {\begin{array}{*{20}{c}}
+  1&{({x_i} - x)} 
+\end{array}} \right]\left[ {\begin{array}{*{20}{c}}
+  a \\ 
+  b 
+\end{array}} \right] + {u_i}$$  
+  
+where,  
+  
+$m(x)$ and $\beta(x)$ are paramaters.  
+  
+Our minimization problem then becomes,  
+  
+$$\arg \mathop {\min }\limits_{a,b} {\sum\limits_{i = 1}^n {\left[ {{y_i} - a - ({x_i} - x)b} \right]} ^2}{K_h}({x_i},x)$$  
+and in matrix notation,  
+  
+$$\arg \mathop {\min }\limits_\delta  {\left[ {y - X\delta } \right]^\prime }K(x)\left[ {y - X\delta } \right]$$  
+  
+where,  
+  
+$\delta=(a,b)^{\prime}$,  
+  
+$X$ is a $n \times (q+1)$ matrix with the $i^{th}$ row equal $\left[ {\begin{array}{*{20}{c}}
+  1&{({x_i} - x)} 
+\end{array}} \right]$,  
+  
+$K(x)$ is $n \times n$ diagonal matrix with the $i^{th}$ element equal to $K_h(x_i,x)$.  
+  
+If $K(x)$ is an identity matrix then we simply have the OLS estimator.  
+  
+If $K(x)$ is equal to $\Omega=vcov(\theta)$ then the above relationship reduces to the generalized least squares.  
+  
+When we minimize the objective function $\hat \delta(x)$ we get:  
+  
+\begin{equation*}
+\begin{split}
+\hat \delta (x) & = \left[ {\begin{array}{*{20}{c}}
+  {\hat m(x)} \\ 
+  {\hat \beta (x)} 
+\end{array}} \right] \\ 
+  &  = {\left[ {\sum\limits_{i = 1}^n {{K_h}({x_i},x)\left( {\begin{array}{*{20}{c}}
+  1 \\ 
+  {{x_i} - x} 
+\end{array}} \right)\left( {\begin{array}{*{20}{c}}
+  1&{({x_i} - x)} 
+\end{array}} \right)} } \right]^{ - 1}}\sum\limits_{i = 1}^n {{K_h}({x_i},x)\left( {\begin{array}{*{20}{c}}
+  1 \\ 
+  {{x_i} - x} 
+\end{array}} \right){y_i}}  \\
+&  = {\left[ {{X^\prime }K(x)X} \right]^{ - 1}}{X^\prime }K(x)y \\
+\end{split}
+\end{equation*}
+  
+where the final equation in matrix form gives our LLLS estimators.  
+  
+  
+  
+  
   
   
 ## Methods  
