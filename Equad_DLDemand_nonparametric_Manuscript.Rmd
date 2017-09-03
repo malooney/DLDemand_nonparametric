@@ -657,6 +657,10 @@ When we minimize the objective function $\hat \delta(x)$ we get:
   
 where the final equation in matrix form gives our LLLS estimators.  
   
+The bias of the LLLS estimator is less complicated to work with than the LCLS and deals better with nonlinear and irregular data. For these reasons many researchers employ the LLLS estimator over the LCLS. However, there are situations where the LCLS estimator will be prefered so an analysis of both methods within the context of the problem is always wise.  
+  
+
+  
   
   
   
