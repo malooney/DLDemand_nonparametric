@@ -1,6 +1,6 @@
 ---
 title: "Nonparametric Demand Analysis"
-subtitle: "Draft - not for publication"
+subtitle: "--- Draft ---"
 author: "Matthew Aaron Looney"
 date: "08/22/2017"
 output:
@@ -34,7 +34,7 @@ geometry: margin = 1.25in
 <!-- \AddToShipoutPictureFG{ -->
 <!--   \AtPageCenter{% or \AtTextCenter -->
 <!--     \makebox[0pt]{\rotatebox[origin=c]{45}{% -->
-<!--       \scalebox{5}{\texttransparent{0.1}{DRAFT}}% -->
+<!--       \scalebox{5}{\texttransparent{0.05}{DRAFT}}% -->
 <!--     }} -->
 <!--   } -->
 <!-- } -->
@@ -659,16 +659,51 @@ where the final equation in matrix form gives our LLLS estimators.
   
 The bias of the LLLS estimator is less complicated to work with than the LCLS and deals better with nonlinear and irregular data. For these reasons many researchers employ the LLLS estimator over the LCLS. However, there are situations where the LCLS estimator will be prefered so an analysis of both methods within the context of the problem is always wise.  
   
-
+With parametric regression analysis it is customary to evaluate the overall significance of the regression. In nonparametric regression we employ a analogous test refered to as Kernel Regression Significance Test as developed by Racine et al. [-@Racine:2006wf] and Racine [-@Racine:1997vd].  
   
+##Kernel Regression Significance Test
   
+The Kernel Regression Significance Test developed by Racine et al. [-@Racine:2006wf] and Racine [-@Racine:1997vd] is applicable to mixed nonparametric regressions, that is, the test will work with a combination of discrete and continuous regressors.  
   
+The null hypothesis and the test statistic are as follows:  
   
+${H_0}:E(y|x,z) = E(y|x)$ almost everywhere (a.e.)
   
+where,  
+  
+$z$ denotes catagorical or continuous variables,  
+  
+$x$ denotes the remaining explanatory variables,  
+  
+$y$ denotes the dependent variable.
+  
+Then the test statistic given by Racine et al. [-@Racine:2006wf]:  
+  
+$${\hat I_n} = \frac{1}{n}\sum\limits_{i = 1}^n {\sum\limits_{l = 1}^{c - 1} {{{\left[ {\hat m({x_i},{z_i} = l) - \hat m({x_i}{z_i} = 0)} \right]}^2}} }$$
+  
+where,  
+  
+$\hat m({x_i}{z_i} = l) = \frac{{\sum\limits_{j = 1}^n {{y_i}{W_{\hat h,ij}}{L_{\hat \lambda ,ij}}{l_{zj,z = l,\hat \lambda z}}} }}{{\sum\limits_{j = 1}^2 {{W_{\hat h,ij}}{L_{\hat \lambda ,ij}}{l_{zj,z = l,\hat \lambda z}}} }}$  
+  
+$\hat I_n \to 0$ in probability under $H_0$.  
   
 ## Methods  
   
+The goal of this study is to investigate the effectivness of using nonparametric regression analysis to recover demand elasticities for a group of three commodities; meats, dairy, and beans. To facilitate the comparison we will estimate equation by equation Ordinary Least Squares regression on the Log-Log demand model (equation 1) developed by Working and Lesser. The reason for choosing this model is the sheer simplicity of the functional form which allows us to easily estimate the model using OLS and nonparametric regression techinques without the concern of complicated estimation procedures or elaborate constraint requirements. This simplicity will allow us to compare the two models as closly as possible to guage how effect the nonparametric technique is at recovering the elasticities.  
+  
+Having assumed the Log-Log demand model functional form we use the Consistent Model Specification Test detailed in section 2.2 to assertain how well the Log-Log functional form does at recovering the true DGP of our date set. An impropper specification of functional form will lead to incorrect paramater estimates. The test is run three times, once for each commodity according to equation 1. In all three cases we preform the test by the following configuration: The distribution was estimated using iid bootstrapping methods with 1000 replications. A pivot table was used so that the distribution approched $N(0,1)$. A random seed was used in the analysis to enable reproducibility and is embedded within the code (available upon request).  
+  
+The Log-Log demand model is estimated equation by equation using standard OLS regression. The only theory constraint available to the model is homogeneity, however, no constraints were imposed on the data in this study. There was no correction for heterogeneity and all variables are assumed to be exogenous, a faulty assumption in the current context, but an assumption that is ignorable given the goal of this study.  
+  
+The nonparametric regression requires the selection of a bandwidth estimation technique. In this study we consider two methods of bandwidth estimation, Least-Squares Cross Validation (LSCV), and Akaike Information Criterion Cross Validation (aic-CV). Within both of these bandwidth estimators there are numerious variations available to fine tune the optimal bandwidth selction. Aside from the difference of base technique, ie. LSCV and aic-CV the configuration is identical between the two methods and follows as given: We use a Fixed bandwidth selection method. We ued a gaussian kernel for all studies, althogh the epanechnikov kernel was evaluated and rejected for lack of preformance. The kernel oder was 2 in all studies. We did not employ any bandwidth scalling in any of these studies.  
+  
+The nonparametric regression techniques used in this study are the Local-Constant Least Squares and the Local-Linear Least Squares. With both of these tehcniques we estimated the residuals of the regression and the gradients, which are of interest when comparing the elasticities obtained by the parametric regression versus the nonparametric regression.  
+  
+A test of the overall regression significance of the nonparametric regression is preformed using the Kernel Regression Significance Test detailed in section 2.5. The test follows the algorithms detailed in Racine et al. [-@Racine:2006wf] with the specifics as follows: iid bootstrapping with 1000 replications was preformed. Bootstrap method type 1 was utilized. A pivitol statistic was calculated by dividing the calculated gradients by their respective standard errors. A random seed was embedded within the code to ensure reprodicibility.
+
 ## Data  
+  
+The data were obtained from the 2006 Ecuadorian consumer expenditure survey and consist of three commidties, meats, dairy, and beans. For all threde commidties we have price and quantity data for 2066 observations. For the Log-Log model the natural logarithm for quantities and prices was taken and passed to the model. For consistancy the nonparametric regression uses the same logarithmic values. See table 1 (below) for summary statistics.  
   
 ```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
 
@@ -678,6 +713,11 @@ stargazer(Dta_sub, header=F, type="latex", summary = TRUE, font.size = "small", 
   
 # Results and Discussion  
   
+
+
+
+
+
 ```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
 
 stargazer(exx_par_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Parametric - Double Log Demand Model")
