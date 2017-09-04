@@ -31,13 +31,13 @@ fontsize: 12pt
 geometry: margin = 1.25in
 ---
 
-<!-- \AddToShipoutPictureFG{ -->
-<!--   \AtPageCenter{% or \AtTextCenter -->
-<!--     \makebox[0pt]{\rotatebox[origin=c]{45}{% -->
-<!--       \scalebox{5}{\texttransparent{0.05}{DRAFT}}% -->
-<!--     }} -->
-<!--   } -->
-<!-- } -->
+\AddToShipoutPictureFG{
+  \AtPageCenter{% or \AtTextCenter
+    \makebox[0pt]{\rotatebox[origin=c]{45}{%
+      \scalebox{5}{\texttransparent{0.05}{DRAFT}}%
+    }}
+  }
+}
 
 ```{r House Keeping, echo=FALSE, message=FALSE, cache=T}
 
@@ -478,7 +478,7 @@ According to the authors, it can be easily shown that the $\hat J_n$ test statis
   
 The importance of proper bandwidth selection in nonparametric analysis is reviewed here. However, for a more detailed discussion of the methods and theory used in this paper see the excellent work by the following authors: Cheng et al.[-@Cheng:1997vy], Hall et al.[-@Hall:2007vq], Hurvich et al.[-@Hurvich:1998wi], Li and Racine[-@li2007nonparametric], Racine and Li[-@Racine:2004tua], and Li and Racine[-@Li:2004tn].  
   
-The most popular methods for bandwidth selection in applied research are data driven, and of the data driven methods Least-Squares Cross Validation (LSCV) and expected Kullback-Leibler cross-validation also know in the literature as Akaike Information Criterion Cross Validation (aic-CV), are the two used in this paper to evaluate the validity of using nonparametric techniques to uncover demand elasticities.  
+The most popular methods for bandwidth selection in applied research are data driven, and of the data driven methods Least-Squares Cross Validation (LSCV) and expected Kullback-Leibler cross-validation also know in the literature as Akaike Information Criterion Cross Validation (aic-CV), are the two we use in this paper to evaluate the validity of using nonparametric techniques to uncover demand elasticities.  
   
 ### Least-Squares Cross Validation (LSCV)  
   
@@ -695,13 +695,17 @@ The Log-Log demand model is estimated equation by equation using standard OLS re
   
 The nonparametric regression requires the selection of a bandwidth estimation technique. In this study we consider two methods of bandwidth estimation, Least-Squares Cross Validation (LSCV), and Akaike Information Criterion Cross Validation (aic-CV). Within both of these bandwidth estimators there are numerous variations available to fine tune the optimal bandwidth selection. Aside from the difference of base technique, ie. LSCV and aic-CV the configuration is identical between the two methods and follows as given: We use a Fixed bandwidth selection method. We used a Gaussian kernel for all studies, although the Epanechnikov kernel was evaluated and rejected for lack of performance. The kernel order was 2 in all studies. We did not employ any bandwidth scaling in any of these studies.  
   
-The nonparametric regression techniques used in this study are the Local-Constant Least Squares and the Local-Linear Least Squares. With both of these techniques we estimated the residuals of the regression and the gradients, which are of interest when comparing the elasticities obtained by the parametric regression versus the nonparametric regression.  
+After testing both bandwidth selection methods the method which provided the best fit was the Akaike Information Criterion Cross Validation (aic-CV). This method was passed to the nonparametric regression model.
+  
+The nonparametric regression techniques used in this study are the Local-Constant Least Squares and the Local-Linear Least Squares. With both of these techniques we estimated the residuals of the regression and the gradients, which are of interest when attempting to directly compare the elasticities obtained by the parametric regression versus the nonparametric regression.  
+  
+After testing both regression methods the method which provided the best fit was the Local-Linear Least Squares (LLLS). This method was used to obtain the data presented in table 3 (below).
   
 A test of the overall regression significance of the nonparametric regression is preformed using the Kernel Regression Significance Test detailed in section 2.5. The test follows the algorithms detailed in Racine et al. [-@Racine:2006wf] with the specifics as follows: iid bootstrapping with 1000 replications was preformed. Bootstrap method type 1 was utilized. A pivitol statistic was calculated by dividing the calculated gradients by their respective standard errors. A random seed was embedded within the code to ensure reproducibility.
 
 ## Data  
   
-The data were obtained from the 2006 Ecuadorian consumer expenditure survey and consist of three commodities, meats, dairy, and beans. For all three commodities we have price and quantity data for 2066 observations. For the Log-Log model the natural logarithm for quantities and prices was taken and passed to the model. For consistency the nonparametric regression uses the same logarithmic values. See table 1 (below) for summary statistics.  
+The data were obtained from the 2006 Ecuadorian consumer expenditure survey and consist of three commodities, meats, dairy, and beans. For all three commodities we have price and quantity data for a total of 2,066 observations. For the Log-Log model the natural logarithm for quantities and prices was taken and passed to the model. For consistency the nonparametric regression uses the same logarithmic values. See table 1 (below) for summary statistics.  
   
 ```{r, echo=FALSE, message=FALSE, results='asis', cache=T}
 
@@ -711,7 +715,7 @@ stargazer(Dta_sub, header=F, type="latex", summary = TRUE, font.size = "small", 
   
 # Results and Discussion  
   
-The primary focus of this paper is to access the validity of using nonparametric regression methods to recover demand elasticities from a consumer consumption data set. In traditional demand analysis a parametric function form model is often picked for its simplicity of estimation or tractability or both. However, the validity of the parameters estimated form a misspecified demand model are called into question when the functional form is assumed and assumed incorrectly. Testing methods have been developed to ascertain the validity of using a parametric form to uncover the underlying DGP. The test we employed in this analysis is the Consistent Model Specification Test. In all three cases the Null of correct specification is rejected at the 0.1% level or greater. This indicates that the Log-Log specification does a poor job at recovering the true DGP for our data set.  
+The primary focus of this paper is to access the validity of using nonparametric regression methods to recover demand elasticities from a consumer consumption data set. In traditional demand analysis a parametric function form model is often picked for its simplicity of estimation or tractability or both. However, the validity of the parameters estimated form a misspecified demand model are called into question when the functional form is assumed and assumed incorrectly. Testing methods have been developed to ascertain the validity of using a parametric form to uncover the underlying DGP. The test we employed in this analysis is the Consistent Model Specification Test. In all three cases the Null of correct specification is rejected at the 0.1% level. This indicates that the Log-Log specification does a poor job at recovering the true DGP for our data set.  
   
 ```{r, echo=FALSE, message=FALSE, results='asis', cache=T}
 
@@ -721,15 +725,15 @@ stargazer(exx_np_wr2, header=F, type="latex", summary = FALSE, font.size = "smal
 
 ```
   
-Table 2 shows the results from the parametric OLS regression of the Log-Log demand model. When we examine the R-squared values for the three equations we notice that equation 1 (meats) does have a relatively high R-squared value which seems to indicate a reasonable fit for this model. However, when we move to evaluate equation 2 (dairy) and equation 3 (beans) we notice progressively decreasing R-squared values which indicates, especially for equation 3, that our OLS regression does not fit the data well enough to be confident that our parameter estimates are reliable.  
+Table 2 shows the results from the parametric OLS regression of the Log-Log demand model. When we examine the R-squared values for the three equations we notice that equation 1 (meats) has a relatively high R-squared value which seems to indicate a reasonable fit for this model. However, when we move to evaluate equation 2 (dairy) and equation 3 (beans) we notice progressively decreasing R-squared values which indicates, especially for equation 3, that our OLS regression does not fit the data well enough to be confident that our parameter estimates are reliable.  
   
 Table 3 shows the results from the nonparametric regression. When we evaluate the R-squared values of the nonparametric regression we notice a  systematic increase in value. All three nonparametric regressions give higher R-squared values over the parametric regression models. This indicates an improvement in model fit using nonparametric techniques.  
   
-Since the parametric form model we have chosen to work with only permits within equation constraints it only makes sense to make comparisons of own price and income elasticities. When we compare the own price elasticities of the parametric regression to the elasticities obtained from the nonparametric regression we notice the nonparametric own price elasticities are all greater in magnitude. When we look at the income elasticities between the two regressions the nonparametric model has lower values. However, the numeric values are all very close and the signs are all in agreement for the elasticities that are significant.  
+Since the parametric form model we have chosen to work with only permits within equation constraints it only makes sense to make compare own price and income elasticities. When we compare the own price elasticities of the parametric regression to the elasticities obtained from the nonparametric regression we notice the nonparametric own price elasticities are all greater in magnitude. When we look at the income elasticities between the two regressions the nonparametric model has lower values. However, the numeric values are all very close and the signs are all in agreement for the elasticities that are significant.  
   
-  Due to the mechanism of estimation of the nonparametric regression a one for one parameter estimate is complicated by the fact that nonparametric regressions make a full range of estimates as opposed to parametric regressions which make point estimates of elasticities. This means we can get a better sense of how the elasticities are distributed across the data by plotting the gradients, in our case the actual elasticity estimates, and viewing the distribution of the elasticities across the entire sample range.  
+  Due to the mechanism of estimation of the nonparametric regression a one-for-one parameter comparison is complicated by the fact that nonparametric regressions make use of the full range of estimates as opposed to parametric regressions which make point estimates of elasticities, in other words, our nonparametric estimates are local while our parametric estimates are global. This means we can get a better sense of how the nonparametric elasticities are distributed across the data by plotting the gradients, in our case the actual elasticity estimates, and viewing the distribution of the elasticities across the entire sample range.  
   
-The plots below show the distribution for the own price and income elasticities. It becomes clear that we have relatively tight clustering of own price elasticities for meats and dairy but we an unusual distribution of own price elasticity on beans. We have a primary peak with two smaller peaks of elasticities to either side of the primary peak. With the income elasticities we see relatively tight clustering for all three commodities.  
+The plots below show the distribution for the own price and income elasticities. It becomes clear that we have relatively tight clustering of own price elasticities for meats and dairy but we have an unusual distribution of own price elasticity on beans. We have a primary peak with two smaller peaks of elasticities to either side of the primary peak. This could mean that our sample population is not homogeneous in their preference for beans. While a positive own price elasticity is rare, it is theoretically possible. With the income elasticities we see relatively tight clustering for all three commodities.  
   
 ```{r, echo=FALSE, message=FALSE, results='asis', fig.height=3, cache=T}
 
@@ -784,15 +788,15 @@ stargazer(AIDS_elas_M_income_constraint_t_sig_wr2, header=F, type="latex", summa
   
 # Conclusions
   
-We have explored the feasibility of using nonparametric regression analysis to recover the own price and income elasticities from a consumer expenditure data set. Using the nonparametric techniques we were able to obtain own price and cross price elasticities that were in agreements with those obtained using the Log-Log demand model, a parametric form model. We confirmed these results by estimating the non-linear AIDS model which also agreed with the elasticities we obtained by using nonparametric regression.  
+We have explored the feasibility of using nonparametric regression analysis to recover the own price and income elasticities from a consumer expenditure data set. Using nonparametric techniques we were able to obtain own price and cross price elasticities that were in agreements with those obtained using the Log-Log demand model, a parametric form model. We confirmed these results by estimating the non-linear AIDS model which also agreed with the elasticities we obtained using nonparametric regression.  
   
-When parametric model specification is taken as known and this assumption is correct, the parametric form regression produces both consistent and efficient estimates. However, we can run into problems when the assumed model does not represent the underlying data generating process. As a result, the parameter estimates obtained by the model will be faulty and could lead to wrong conclusions which has the potential to negatively effect policy.  
+When parametric model specification is taken as known and this assumption is correct, the parametric form regression produces both consistent and efficient estimates. However, we can run into problems when the assumed model does not represent the underlying data generating process. As a result, the parameter estimates obtained by the model will be faulty and could lead to wrong conclusions which have the potential to negatively effect policy.  
   
-There are trade-offs when employing  nonparametric techniques. When we estimate parameters using unconstrained nonparametric regression we weaken the conclusions we can draw about commodity substitution and complementarity. In fact, this weakening of economic conclusions can be a pervasive problem when estimating using unconstrained nonparametric techniques. Work has begun to allow the incorporation of economic theory constraints into nonparametric methods, if so desired. An additional issue with using nonparametric methods is the much larger computational requirements. This issue is diminishing as computer hardware and efficient algorithm development move forward but a well specified parametric model requires a small fraction of the computing resource as a comparably specified nonparametric model.  
+There are trade-offs when employing  nonparametric techniques. When we estimate parameters using unconstrained nonparametric regression we weaken the conclusions we can draw about commodity substitution and complementarity. In fact, this weakening of economic conclusions can be a pervasive problem when estimating using unconstrained nonparametric techniques. Work has begun to allow the incorporation of economic theory constraints into nonparametric methods, if so desired. An additional issue with using nonparametric methods is the much larger computational requirements. This issue is diminishing as computer hardware and efficient algorithm development move forward but a well specified parametric model requires a small fraction of the computing resource compared to the comparably specified nonparametric model.  
   
-Despite these trade-offs, nonparametric methods do bring much to the table. nonparametric techniques can do a good job at uncovering functional forms which can potentially be used to develop more accurate parametric form models. nonparametric methods are considered local estimators as opposed to the parametric models which are global in nature. This local estimator gives us better information at specific points across the entire data range. We realized this advantage when evaluating the gradient (elasticity) plots in section 3. The unusual elasticity distribution on the own price on beans would have been obscured using parametric techniques. This type of data evaluation is only available when using nonparametric regression analysis.  
+Despite these trade-offs, nonparametric methods do bring much to the table. nonparametric techniques can do a good job at uncovering complex functional forms which can potentially be used to develop more accurate parametric form models. nonparametric methods are considered local estimators as opposed to the parametric models which are global in nature. This local estimator gives us better information at specific points across the entire data range. We realized this advantage when evaluating the gradient (elasticity) plots in section 3. The unusual elasticity distribution on the own price on beans would have been obscured using parametric techniques. This type of data evaluation is only available when using nonparametric regression analysis.  
   
-We have successfully showed how nonparametric regression can be used to uncover demand elasticities for a group of commodities within a consumer expenditure data set. This method could be extended by evaluating a more complex set of data. We would also be interested to preform Monte Carlo studies as an additional comparison point. With the emergence of nonparametric Seemingly Unrelated Regression and constrained nonparametric methods we would be interested in evaluating the effectiveness of nonparametric regression against a more informative demand model such as the ADIS (and variants of) and the Exact Affine Stone Index (EASI). We feel that nonparametric techniques have been underutilized in demand analysis and could help propel the field forward with providing useful insights which have been difficult to uncover.
+We have successfully showed how nonparametric regression can be used to uncover demand elasticities for a group of commodities within a consumer expenditure data set. This method could be extended by evaluating a more complex set of data. We would also be interested to preform Monte Carlo studies as an additional comparison point. With the emergence of nonparametric Seemingly Unrelated Regression and constrained nonparametric methods we would be interested in evaluating the effectiveness of nonparametric regression against a more informative demand model such as the ADIS (and variants of) and the Exact Affine Stone Index (EASI). We feel that nonparametric techniques have been underutilized in demand analysis and could help propel the field forward while providing useful insights which have been difficult to uncover.
 
 \newpage
 
