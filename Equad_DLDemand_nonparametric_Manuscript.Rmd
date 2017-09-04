@@ -31,13 +31,13 @@ fontsize: 12pt
 geometry: margin = 1.25in
 ---
 
-<!-- \AddToShipoutPictureFG{ -->
-<!--   \AtPageCenter{% or \AtTextCenter -->
-<!--     \makebox[0pt]{\rotatebox[origin=c]{45}{% -->
-<!--       \scalebox{5}{\texttransparent{0.05}{DRAFT}}% -->
-<!--     }} -->
-<!--   } -->
-<!-- } -->
+\AddToShipoutPictureFG{
+  \AtPageCenter{% or \AtTextCenter
+    \makebox[0pt]{\rotatebox[origin=c]{45}{%
+      \scalebox{5}{\texttransparent{0.05}{DRAFT}}%
+    }}
+  }
+}
 
 ```{r House Keeping, echo=FALSE, message=FALSE, cache=TRUE}
 
@@ -414,7 +414,7 @@ Nonparametric modelling affords many advantages over their parametric counterpar
   
 In this paper we seek to explore the validity of using nonparametric techniques to uncover estimates of demand elasticities. To this end we use the Log-Log demand system developed by Working [-@Working:1943wb] and Lesser [-@Leser:1963vd]. The benefit of using this type of parametric form is the sheer simplicity of the model. This simplicity allows us to easily compare the effectivness of our nonparametric econometric technique without getting bogged down in complicated estimation considerations or theory constraints. The only theory constraints available to the Log-Log demand model is homogeneity of degree zero in prices and income. However, even though this constraint is available to the Log-Log model we decide to forego all economic theory constraints to make comparability more consistent.  
   
-## Log-Log model  
+## Log-Log Demand Model  
   
 Equation 1 shows the Log-Log model specification for the Marshallian own and cross prices elasticities ($e_{ik}$) and the income elasticities ($e_i$). Since we are unable to impose cross equation constraints our study will focus on the own price and income elasticities of this model. While the Hicksian elasticities are of more interest for policy and welfare studies, we focus only on the Marshallian estimates so a direct estimate comparison can be made between the parametric and nonparametric elasticity.  
   
@@ -713,20 +713,25 @@ stargazer(Dta_sub, header=F, type="latex", summary = TRUE, font.size = "small", 
   
 # Results and Discussion  
   
-
-
-
-
-
+The primary focus of this paper is to access the valididyt of using nonparametric regression methods to recover demand elasticities from a consumer consumption data set. In traditional demand analysis a paramatric function form model is often picked for its simplicity of estimation or tractability or both. However, the validity of the paramaters estimated form a misspecified demand model are called into question when the functional form is assumed and assumed incorrectly. Testing methods have been developed to assertain the validity of using a parametric form to uncover the underlying DGP. The test we employed in this analysis is the Consistent Model Specification Test. In all three cases the Null of correct specification is rejected at the 0.1% level or greater. This indicates that the Log-Log specification does a poor job at recovering the true DGP for our data set.  
+  
 ```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
 
 stargazer(exx_par_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Parametric - Double Log Demand Model")
 
 stargazer(exx_np_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Nonparametric Regression using Gaussian Kernel")
 
-stargazer(AIDS_elas_M_income_constraint_t_sig_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Marshallian")
-
 ```
+  
+Table 2 shows the results from the parametric OLS regression of the Log-Log demand model. When we examine the R-squared values for the three equaitons we notice that equation 1 (meats) does have a relativly high R-squared vaule which seems to indicate a resonable fit for this model. However, when we move to evauluate equation 2 (dairy) and equation 3 (beans) we notice progressivly decreasing R-squared values which idicates, especially for equation 3, that our OLS regression does not fit the data well enough to be confident that our paramater estimates are reliable.  
+  
+Table 3 shows the results from the nonparametric regression. When we evaluate the R-squared values of the nonparamteric regression we notice a  systematic increase in value. All three nonparametric regressions give higer R-squared values over the parametric regression models. This indicates an improvement in model fit using nonparametric techniques.  
+  
+Since the parametric form model we have choosen to work with only permits within equation constrinats it only makes sense to make comparissons of own price and income elasticities. When we compare the own price elasticities of the parametric regression to the elasticities obtained from the nonparamteric regression we notice the nonparametric own price elasticities are all greater in magnitude. When we look at the income elasticities between the two regressions the nonparamteric model has lower values. However, the numeric values are all very close and the signs are all in agreement for the elasticities that are significant.  
+  
+  Due to the mechanism of estimation of the nonparametric regression a one for one paramater estimate is complicated by the fact that nonparametric regressions make a full range of estimates as opposed to paramaertic regressions which make point estimates of elasticities. This means we can get a better sense of how the elasticities are distributed across the data by plotting the gradiants, in our case the actuall elasticity estimates, and viewing the distribution of the elasticities across the entire sample range.  
+  
+The plots below show the distribution for the own price and income elasticities. It becomes clear that we have relativly tight clustering of own price elasticities for meats and dairy but we an unusual distribution of own price elasticity on beans. We have a primary peak with two smaller peaks of elasticities to either side of the primary peak. With the income elasticities we see relativly tight clustering for all three commidities.  
   
 ```{r, echo=FALSE, message=FALSE, results='asis', fig.height=3, cache=TRUE}
 
@@ -740,28 +745,20 @@ plot(density(model_2.np$grad[,4]), sub = "Dairy - income elasticity", main= "",x
 plot(density(model_3.np$grad[,4]), sub = "Beans - income elasticity", main= "", xlim=c(-5,5))
 
 ```
+  
+For a reality check we have included an evaluation of the same data set considered in tables 2 and 3 and run this data through the Almost Ideal Demand System (AIDS). 
 
+
+```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
+
+stargazer(AIDS_elas_M_income_constraint_t_sig_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Marshallian")
+
+```
+  
 # Conclusions
   
-
-
-
-
+This type of data evaluation is only available when using nonparamteric regression analysis and the peculiar results on own price elasticity of beans obtained by evaluating the distribution of elasticities would have been obscured with traditional paramaetric regression.
 
 \newpage
 
 # References  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
