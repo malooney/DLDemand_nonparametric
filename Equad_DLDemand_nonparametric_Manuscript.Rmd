@@ -39,7 +39,7 @@ geometry: margin = 1.25in
   }
 }
 
-```{r House Keeping, echo=FALSE, message=FALSE, cache=F}
+```{r House Keeping, echo=FALSE, message=FALSE, cache=T}
 
 rm(list=ls())
 
@@ -63,7 +63,7 @@ source("~/Google Drive/digitalLibrary/*AAEC 6310 Demand and Price Analysis/deman
 
 ```
 
-```{r Import & data manip, echo=FALSE, message=FALSE, cache=F}
+```{r Import & data manip, echo=FALSE, message=FALSE, cache=T}
 
 Dta <- read.csv("/Users/malooney/Google Drive/digitalLibrary/*Econometrics2/Lab3/protein.csv")
 Dta_sub <- data.frame(obs=1:nrow(Dta))
@@ -91,7 +91,7 @@ Dta_sub_log <- log(Dta_sub[,c(2:7,11)])
 
 ```
 
-```{r Single Equation Model Estimation using Log-Log Functional Form, echo=FALSE, message=FALSE, cache=F}
+```{r Single Equation Model Estimation using Log-Log Functional Form, echo=FALSE, message=FALSE, cache=T}
 
 # Single Equation Model Estimation using Log-Log Functional Form
 # Estimate Marshallian elasticities - unrestricted
@@ -141,7 +141,7 @@ dimnames(exx_par_wr2) <- list(c("meats_lnq1", "dairy_lnq2", "beans_lnq3"), c("me
 
 ```
   
-```{r, echo=FALSE, message=FALSE, fig.height=3, cache=TRUE}
+```{r, echo=FALSE, message=FALSE, fig.height=3, cache=T}
 
 dld_1_formula <- formula(q1 ~ p1+ p2+ p3+ X)
 dld_2_formula <- formula(q2 ~ p1+ p2+ p3+ X)
@@ -705,7 +705,7 @@ A test of the overall regression significance of the nonparametric regression is
   
 The data were obtained from the 2006 Ecuadorian consumer expenditure survey and consist of three commidties, meats, dairy, and beans. For all threde commidties we have price and quantity data for 2066 observations. For the Log-Log model the natural logarithm for quantities and prices was taken and passed to the model. For consistancy the nonparametric regression uses the same logarithmic values. See table 1 (below) for summary statistics.  
   
-```{r, echo=FALSE, message=FALSE, results='asis', cache=F}
+```{r, echo=FALSE, message=FALSE, results='asis', cache=T}
 
 stargazer(Dta_sub, header=F, type="latex", summary = TRUE, font.size = "small", notes= c("good 1 = meats", "good 2 = dairy", "good 3 = beans"), notes.align= "l", flip = F, float = T, float.env = "table", title="Summary Statistics")
 
@@ -715,7 +715,7 @@ stargazer(Dta_sub, header=F, type="latex", summary = TRUE, font.size = "small", 
   
 The primary focus of this paper is to access the valididyt of using nonparametric regression methods to recover demand elasticities from a consumer consumption data set. In traditional demand analysis a paramatric function form model is often picked for its simplicity of estimation or tractability or both. However, the validity of the paramaters estimated form a misspecified demand model are called into question when the functional form is assumed and assumed incorrectly. Testing methods have been developed to assertain the validity of using a parametric form to uncover the underlying DGP. The test we employed in this analysis is the Consistent Model Specification Test. In all three cases the Null of correct specification is rejected at the 0.1% level or greater. This indicates that the Log-Log specification does a poor job at recovering the true DGP for our data set.  
   
-```{r, echo=FALSE, message=FALSE, results='asis'}
+```{r, echo=FALSE, message=FALSE, results='asis', cache=T}
 
 stargazer(exx_par_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Parametric - Double Log Demand Model")
 
@@ -733,7 +733,7 @@ Since the parametric form model we have choosen to work with only permits within
   
 The plots below show the distribution for the own price and income elasticities. It becomes clear that we have relativly tight clustering of own price elasticities for meats and dairy but we an unusual distribution of own price elasticity on beans. We have a primary peak with two smaller peaks of elasticities to either side of the primary peak. With the income elasticities we see relativly tight clustering for all three commidities.  
   
-```{r, echo=FALSE, message=FALSE, results='asis', fig.height=3, cache=F}
+```{r, echo=FALSE, message=FALSE, results='asis', fig.height=3, cache=T}
 
 par(mfrow=c(1,3))
 plot(density(model_1.np$grad[,1]), sub = "Meats - own price elasticity", main= "", xlim=c(-5,5))
@@ -778,7 +778,7 @@ The standard errors of the elasticities are estimated using the Delta Method.
   
 Table 4 shows the Marshallian elasticities obtained from the AIDS model. When we compare these results to our parametric regression and nonparametric regression we see the nonparametric version obtains elasticities closer in values to the AIDS model estimates. We see this trend in both the own price and income elasticities of the nonparametric model and the AIDS model. This result seems to confirm the nonparametric regression does a better job at recovering the demand elasticities in this specific case.  
   
-```{r, echo=FALSE, message=FALSE, results='asis'}
+```{r, echo=FALSE, message=FALSE, results='asis', cache=T}
 
 stargazer(AIDS_elas_M_income_constraint_t_sig_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Marshallian")
 
@@ -790,11 +790,11 @@ We have explored the fesability of using nonparametric regresision analysis to r
   
 When parametric model specification is taken as known and this assumption is correct, the parametric form regression produces both consistent and efficient estimates. However, we can run into problems when the assumed model does not represent the underlysing data generating process. As a result, the paramater estimates obtained by the model will be faulty and could lead to wrong conclusions which has the potiential to neagtivly effect poilicy.  
   
-There are trade-offs with employing  nonparametric techniques. When we estimate paramaters using unconstrained nonparametric regression we weaken the conclusions we can draw about commidity substitution and complementarity. In fact, this weakening of economic conclusions can be a pervasive problem when estimating using unconstrained nonparametric techniques. Work has begun to allow the incorporation of economic theory constraints into nonparamteric methods, if so desired. An additional issue with using nonparamteric methods is the much larger computational requirements. This issue is dimenishing as coumputer hardware and efficient algoritm devlopment move forward but a well specified paramteric model requires a small fraction of the computing resourse as a comprably specified nonparamteric model.  
+There are trade-offs when employing  nonparametric techniques. When we estimate paramaters using unconstrained nonparametric regression we weaken the conclusions we can draw about commidity substitution and complementarity. In fact, this weakening of economic conclusions can be a pervasive problem when estimating using unconstrained nonparametric techniques. Work has begun to allow the incorporation of economic theory constraints into nonparamteric methods, if so desired. An additional issue with using nonparamteric methods is the much larger computational requirements. This issue is dimenishing as coumputer hardware and efficient algoritm devlopment move forward but a well specified paramteric model requires a small fraction of the computing resourse as a comprably specified nonparamteric model.  
   
-Despite these trade-offs nonparametric methods do bring alot to the table. 
-
-This type of data evaluation is only available when using nonparamteric regression analysis and the peculiar results on own price elasticity of beans obtained by evaluating the distribution of elasticities would have been obscured with traditional paramaetric regression.
+Despite these trade-offs, nonparametric methods do bring alot to the table. Nonparametric techniques can do a good job at uncovering functional forms which can potientially be used to develop more accurate parametric form models. Nonparametric methods are considered local estimators as opposed to the parametric models which are global in nature. This local estimator gives us betetr information at specific points across the entire data range. We ralized this advantage when evaluating the gradient (elasticity) plots in section 3. The unusual elasticity distribution on the own price on beans would have been ubscured using parametric techniques. This type of data evaluation is only available when using nonparamteric regression analysis.  
+  
+We have sucessfully showed how nonparametric regression can be used to uncover demand elasticities for a group of commodities within a consumer eexpenditure data set. This method could be extended by evaluating a more complex set of data. We would also be interested to preform Monte Carlo studies as an additional comparisson point. With the emergence of nonparametric Seemingly Unrelated Resgression and constrained nonparametric methods we would be interested in evaluating the effectivness of nonparametric regression against a more informative demand model such as the ADIS (and variants of) and the Exact Affine Stone Index (EASI). We feel that nonparametric techniques have been underutilized in demand analysis and could help propell the field forward with providing useful insights which have been difficult to uncover.
 
 \newpage
 
