@@ -120,7 +120,7 @@ exx_par_t <- matrix(
 i <- 1
 j <- 1
 temp <- matrix(nrow=3, ncol = 4, 
-  dimnames = list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("meats", "dairy", "pulses", "income_elasticity"))
+  dimnames = list(c("meats_lnq1", "dairy_lnq2", "beans_lnq3"), c("meats", "dairy", "beans", "income_elasticity"))
   )
 
 while(i != nrow(exx_par_t)+1 && j != ncol(exx_par_t) ){
@@ -137,7 +137,7 @@ exx_par_t_sig <- temp # put results into matrix
 exx_par_r2 <- matrix(c(signif(smry_dld_marshallian_1$r.squared, 5), signif(smry_dld_marshallian_2$r.squared, 5), signif(smry_dld_marshallian_3$r.squared, 5)), ncol=1)
 
 exx_par_wr2 <- cbind(exx_par_t_sig, exx_par_r2)
-dimnames(exx_par_wr2) <- list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("meats", "dairy", "pulses", "income_elasticity", "R-squared"))
+dimnames(exx_par_wr2) <- list(c("meats_lnq1", "dairy_lnq2", "beans_lnq3"), c("meats", "dairy", "beans", "income_elasticity", "R-squared"))
 
 ```
   
@@ -278,7 +278,7 @@ exx_np_t <- matrix(unlist(c(e1x_np_t, e2x_np_t, e3x_np_t)), nrow = 3, byrow = TR
 i <- 1
 j <- 1
 temp <- matrix(nrow=3, ncol = 4, 
-  dimnames = list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("meats", "dairy", "pulses", "income_elasticity"))
+  dimnames = list(c("meats_lnq1", "dairy_lnq2", "beans_lnq3"), c("meats", "dairy", "pulses", "income_elasticity"))
   )
 
 while(i != nrow(exx_np_t)+1 && j != ncol(exx_np_t) ){
@@ -293,7 +293,7 @@ while(i != nrow(exx_np_t)+1 && j != ncol(exx_np_t) ){
 exx_np_t_sig <- temp # put results into matrix
 
 exx_np_wr2 <- cbind(exx_np_t_sig, exx_np_r2)
-dimnames(exx_np_wr2) <- list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("meats", "dairy", "pulses", "income_elasticity", "R-squared"))
+dimnames(exx_np_wr2) <- list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("meats", "dairy", "beans", "income_elasticity", "R-squared"))
 
 
 #########################################
@@ -336,7 +336,7 @@ AIDS_elas_M_income_constraint_t <- cbind(AIDS_elas_M_constraint_t, AIDS_elas_inc
 i <- 1
 j <- 1
 temp <- matrix(nrow=3, ncol = 4, 
-  dimnames = list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("meats", "dairy", "pulses", "income_elasticity"))
+  dimnames = list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("meats", "dairy", "beans", "income_elasticity"))
   )
 
 while(i != nrow(AIDS_elas_M_income_constraint_t)+1 && j != ncol(AIDS_elas_M_income_constraint_t) ){
@@ -350,7 +350,7 @@ while(i != nrow(AIDS_elas_M_income_constraint_t)+1 && j != ncol(AIDS_elas_M_inco
 }
 AIDS_elas_M_income_constraint_t_sig <- temp # put results into matrix
 
-AIDS_elas_M_income_constraint_r2 <- matrix(signif(AIDS_estResult_constraint$r2, 5), ncol=1, dimnames = list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("R-squared")))
+AIDS_elas_M_income_constraint_r2 <- matrix(signif(AIDS_estResult_constraint$r2, 5), ncol=1, dimnames = list(c("meats_lnq1", "dairy_lnq2", "beans_lnq3"), c("R-squared")))
 
 AIDS_elas_M_income_constraint_t_sig_wr2 <- cbind(AIDS_elas_M_income_constraint_t_sig, 
                                                  AIDS_elas_M_income_constraint_r2)
@@ -746,7 +746,37 @@ plot(density(model_3.np$grad[,4]), sub = "Beans - income elasticity", main= "", 
 
 ```
   
-For a reality check we have included an evaluation of the same data set considered in tables 2 and 3 and run this data through the Almost Ideal Demand System (AIDS). 
+The Almost Ideal Demand System (AIDS) developed by Deaton and Muellbauer [-@Deaton:1980vf], [@Deaton:1980vh] has been one of the most highly used demand system specifications since its introduction in the 1980's. Monte Carlo studies have shown the AIDS specification to be effective at recovering the "true"" elasticities of demand under a variety of situations [@Barnett:2008ut]. For this reason, we will use the AIDS model as a reality check against our Log-Log demand model and our nonparametric regression model. We will compare the elasticities estimated between all three model specifications to gain insight about how effective our nonparametric regression isat recovering demand elasticities.  
+  
+The Full AIDS model takes the following functional form:  
+  
+\begin{equation*}
+{w_i} = {\alpha _i} + \sum\limits_{j = 1}^n {\gamma _{ij}^{}\ln {p_j} + {\beta _i}\ln \left( {\frac{X}{{{P}}}} \right)}  + {\mu _i}
+\end{equation*}
+  
+where,   
+  
+${lnP} =$  a price index $= {\alpha _0} + \sum\limits_j^{} {{\alpha _j}{p_j}}  + \frac{1}{2}\sum\limits_j^{} {\sum\limits_i^{} {{\gamma _{ij}}\ln {p_i}\ln {p_j}} }$  
+  
+It should be readily apparent that the Full AIDS model can not be estimated using strictly linear estimation techniques. The non-linear AIDS model has been estimated by full information maximum likelihood (FIML) and by non-linear SUR methods, however, these methods suffer from difficulties with convergence. Several authors have shown that an iterated linear estimator can be consistently and asymptotically efficiently estimated by the Iterated Linear Least Squares Estimator (ILLE) developed by Blundell and Robin [-@Blundell:1999tw]. It is this iterated estimation method that is employed in this analysis of the Full AIDS model.  
+  
+Although the ILLE method is computationally efficient, the algorithm converges more quickly if starting values are passed on the first iteration. In this study, the initial parameter values were obtained by first estimating the LA/AIDS model using Stone's price index, then passing the estimated parameter values to the ILLE algorithm as the initial starting values. Economic theory restrictions were inposed on the AIDS model, Homogeneity and symmetry.  
+  
+The Marshallian own and cross price elasticities are given by the following formula:  
+  
+\begin{equation}
+{\varepsilon _{ij}} =  - {\delta _{ij}} + \frac{{{\gamma _{ij}}}}{{{w_i}}} - {\beta _i}\frac{{{w_j}}}{{{w_i}}} - \frac{{{\beta _i}}}{{{w_i}}}\sum\limits_k^{} {{\gamma _{kj}}\ln {p_k}}
+\end{equation}
+  
+The income elasticity is:  
+  
+\begin{equation}
+{\eta _i} = 1 + \frac{{{\beta _i}}}{{{w_i}}}
+\end{equation}
+  
+The standard errors of the elasticities are estimated using the Delta Method.  
+  
+Table 4 shows the Marshallian elasticities obtained from the AIDS model. When we compare these results to our parametric regression and nonparametric regression we see the nonparametric version obtains elasticities closer in values to the AIDS model estimates. We see this trend in both the own price and income elasticities of the nonparametric model and the AIDS model.
 
 
 ```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
