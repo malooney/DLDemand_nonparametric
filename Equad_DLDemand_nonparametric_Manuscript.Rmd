@@ -1,6 +1,6 @@
 ---
-title: "Nonparametric Demand Analysis"
-subtitle: "--- Draft ---"
+title: "A Nonparametric Demand Analysis"
+subtitle: "Recovering elasticities with nonparametric regression"
 author: "Matthew Aaron Looney"
 date: "08/22/2017"
 output:
@@ -39,7 +39,7 @@ geometry: margin = 1.25in
   }
 }
 
-```{r House Keeping, echo=FALSE, message=FALSE, cache=TRUE}
+```{r House Keeping, echo=FALSE, message=FALSE, cache=F}
 
 rm(list=ls())
 
@@ -48,10 +48,10 @@ rm(list=ls())
 set.seed(38532842) # all sequential simulations will start from this seed
 
 library(readxl)
-library(stargazer)
 library(systemfit)
 library(np)
 library(micEconAids)
+library(stargazer)
 
 options(np.messages=FALSE) 
 #options(digits=5)
@@ -63,7 +63,7 @@ source("~/Google Drive/digitalLibrary/*AAEC 6310 Demand and Price Analysis/deman
 
 ```
 
-```{r Import & data manip, echo=FALSE, message=FALSE, cache=TRUE}
+```{r Import & data manip, echo=FALSE, message=FALSE, cache=F}
 
 Dta <- read.csv("/Users/malooney/Google Drive/digitalLibrary/*Econometrics2/Lab3/protein.csv")
 Dta_sub <- data.frame(obs=1:nrow(Dta))
@@ -91,7 +91,7 @@ Dta_sub_log <- log(Dta_sub[,c(2:7,11)])
 
 ```
 
-```{r Single Equation Model Estimation using Log-Log Functional Form, echo=FALSE, message=FALSE, cache=TRUE}
+```{r Single Equation Model Estimation using Log-Log Functional Form, echo=FALSE, message=FALSE, cache=F}
 
 # Single Equation Model Estimation using Log-Log Functional Form
 # Estimate Marshallian elasticities - unrestricted
@@ -278,7 +278,7 @@ exx_np_t <- matrix(unlist(c(e1x_np_t, e2x_np_t, e3x_np_t)), nrow = 3, byrow = TR
 i <- 1
 j <- 1
 temp <- matrix(nrow=3, ncol = 4, 
-  dimnames = list(c("meats_lnq1", "dairy_lnq2", "beans_lnq3"), c("meats", "dairy", "pulses", "income_elasticity"))
+  dimnames = list(c("meats_lnq1", "dairy_lnq2", "beans_lnq3"), c("meats", "dairy", "beans", "income_elasticity"))
   )
 
 while(i != nrow(exx_np_t)+1 && j != ncol(exx_np_t) ){
@@ -293,7 +293,7 @@ while(i != nrow(exx_np_t)+1 && j != ncol(exx_np_t) ){
 exx_np_t_sig <- temp # put results into matrix
 
 exx_np_wr2 <- cbind(exx_np_t_sig, exx_np_r2)
-dimnames(exx_np_wr2) <- list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("meats", "dairy", "beans", "income_elasticity", "R-squared"))
+dimnames(exx_np_wr2) <- list(c("meats_lnq1", "dairy_lnq2", "beans_lnq3"), c("meats", "dairy", "beans", "income_elasticity", "R-squared"))
 
 
 #########################################
@@ -336,7 +336,7 @@ AIDS_elas_M_income_constraint_t <- cbind(AIDS_elas_M_constraint_t, AIDS_elas_inc
 i <- 1
 j <- 1
 temp <- matrix(nrow=3, ncol = 4, 
-  dimnames = list(c("meats_lnq1", "dairy_lnq2", "pulses_lnq3"), c("meats", "dairy", "beans", "income_elasticity"))
+  dimnames = list(c("meats_lnq1", "dairy_lnq2", "beans_lnq3"), c("meats", "dairy", "beans", "income_elasticity"))
   )
 
 while(i != nrow(AIDS_elas_M_income_constraint_t)+1 && j != ncol(AIDS_elas_M_income_constraint_t) ){
@@ -705,7 +705,7 @@ A test of the overall regression significance of the nonparametric regression is
   
 The data were obtained from the 2006 Ecuadorian consumer expenditure survey and consist of three commidties, meats, dairy, and beans. For all threde commidties we have price and quantity data for 2066 observations. For the Log-Log model the natural logarithm for quantities and prices was taken and passed to the model. For consistancy the nonparametric regression uses the same logarithmic values. See table 1 (below) for summary statistics.  
   
-```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
+```{r, echo=FALSE, message=FALSE, results='asis', cache=F}
 
 stargazer(Dta_sub, header=F, type="latex", summary = TRUE, font.size = "small", notes= c("good 1 = meats", "good 2 = dairy", "good 3 = beans"), notes.align= "l", flip = F, float = T, float.env = "table", title="Summary Statistics")
 
@@ -715,7 +715,7 @@ stargazer(Dta_sub, header=F, type="latex", summary = TRUE, font.size = "small", 
   
 The primary focus of this paper is to access the valididyt of using nonparametric regression methods to recover demand elasticities from a consumer consumption data set. In traditional demand analysis a paramatric function form model is often picked for its simplicity of estimation or tractability or both. However, the validity of the paramaters estimated form a misspecified demand model are called into question when the functional form is assumed and assumed incorrectly. Testing methods have been developed to assertain the validity of using a parametric form to uncover the underlying DGP. The test we employed in this analysis is the Consistent Model Specification Test. In all three cases the Null of correct specification is rejected at the 0.1% level or greater. This indicates that the Log-Log specification does a poor job at recovering the true DGP for our data set.  
   
-```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
+```{r, echo=FALSE, message=FALSE, results='asis'}
 
 stargazer(exx_par_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Parametric - Double Log Demand Model")
 
@@ -733,7 +733,7 @@ Since the parametric form model we have choosen to work with only permits within
   
 The plots below show the distribution for the own price and income elasticities. It becomes clear that we have relativly tight clustering of own price elasticities for meats and dairy but we an unusual distribution of own price elasticity on beans. We have a primary peak with two smaller peaks of elasticities to either side of the primary peak. With the income elasticities we see relativly tight clustering for all three commidities.  
   
-```{r, echo=FALSE, message=FALSE, results='asis', fig.height=3, cache=TRUE}
+```{r, echo=FALSE, message=FALSE, results='asis', fig.height=3, cache=F}
 
 par(mfrow=c(1,3))
 plot(density(model_1.np$grad[,1]), sub = "Meats - own price elasticity", main= "", xlim=c(-5,5))
@@ -760,7 +760,7 @@ ${lnP} =$  a price index $= {\alpha _0} + \sum\limits_j^{} {{\alpha _j}{p_j}}  +
   
 It should be readily apparent that the Full AIDS model can not be estimated using strictly linear estimation techniques. The non-linear AIDS model has been estimated by full information maximum likelihood (FIML) and by non-linear SUR methods, however, these methods suffer from difficulties with convergence. Several authors have shown that an iterated linear estimator can be consistently and asymptotically efficiently estimated by the Iterated Linear Least Squares Estimator (ILLE) developed by Blundell and Robin [-@Blundell:1999tw]. It is this iterated estimation method that is employed in this analysis of the Full AIDS model.  
   
-Although the ILLE method is computationally efficient, the algorithm converges more quickly if starting values are passed on the first iteration. In this study, the initial parameter values were obtained by first estimating the LA/AIDS model using Stone's price index, then passing the estimated parameter values to the ILLE algorithm as the initial starting values. Economic theory restrictions were inposed on the AIDS model, Homogeneity and symmetry.  
+Although the ILLE method is computationally efficient, the algorithm converges more quickly if starting values are passed on the first iteration. In this study, the initial parameter values were obtained by first estimating the LA/AIDS model using Stone's price index, then passing the estimated parameter values to the ILLE algorithm as the initial starting values. Economic theory restrictions were inposed on the AIDS model, homogeneity and symmetry.  
   
 The Marshallian own and cross price elasticities are given by the following formula:  
   
@@ -776,10 +776,9 @@ The income elasticity is:
   
 The standard errors of the elasticities are estimated using the Delta Method.  
   
-Table 4 shows the Marshallian elasticities obtained from the AIDS model. When we compare these results to our parametric regression and nonparametric regression we see the nonparametric version obtains elasticities closer in values to the AIDS model estimates. We see this trend in both the own price and income elasticities of the nonparametric model and the AIDS model.
-
-
-```{r, echo=FALSE, message=FALSE, results='asis', cache=TRUE}
+Table 4 shows the Marshallian elasticities obtained from the AIDS model. When we compare these results to our parametric regression and nonparametric regression we see the nonparametric version obtains elasticities closer in values to the AIDS model estimates. We see this trend in both the own price and income elasticities of the nonparametric model and the AIDS model. This result seems to confirm the nonparametric regression does a better job at recovering the demand elasticities in this specific case.  
+  
+```{r, echo=FALSE, message=FALSE, results='asis'}
 
 stargazer(AIDS_elas_M_income_constraint_t_sig_wr2, header=F, type="latex", summary = FALSE, font.size = "small", notes= c("***Significant at the 1 percent level,", "**Significant at the 5 percent level,", "*Significant at the 10 percent level."), notes.align= "r", flip = F, float = T, float.env = "table", title="Full AIDS - Marshallian")
 
@@ -787,6 +786,14 @@ stargazer(AIDS_elas_M_income_constraint_t_sig_wr2, header=F, type="latex", summa
   
 # Conclusions
   
+We have explored the fesability of using nonparametric regresision analysis to recover the own price and income elasticities from a consumer expenditure data set. Using the nonparametric techniques we were able to obtain own price and cross price elasticities that were in agreements with those obtained using the Log-Log demand model, a paramteric form model. We confirmed these results by estimating the non-linear AIDS model which also agreeded with the elasticities we obtained by using nonparamtetric regression.  
+  
+When parametric model specification is taken as known and this assumption is correct, the parametric form regression produces both consistent and efficient estimates. However, we can run into problems when the assumed model does not represent the underlysing data generating process. As a result, the paramater estimates obtained by the model will be faulty and could lead to wrong conclusions which has the potiential to neagtivly effect poilicy.  
+  
+There are trade-offs with employing  nonparametric techniques. When we estimate paramaters using unconstrained nonparametric regression we weaken the conclusions we can draw about commidity substitution and complementarity. In fact, this weakening of economic conclusions can be a pervasive problem when estimating using unconstrained nonparametric techniques. Work has begun to allow the incorporation of economic theory constraints into nonparamteric methods, if so desired. An additional issue with using nonparamteric methods is the much larger computational requirements. This issue is dimenishing as coumputer hardware and efficient algoritm devlopment move forward but a well specified paramteric model requires a small fraction of the computing resourse as a comprably specified nonparamteric model.  
+  
+Despite these trade-offs nonparametric methods do bring alot to the table. 
+
 This type of data evaluation is only available when using nonparamteric regression analysis and the peculiar results on own price elasticity of beans obtained by evaluating the distribution of elasticities would have been obscured with traditional paramaetric regression.
 
 \newpage
