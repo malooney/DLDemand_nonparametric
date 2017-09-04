@@ -1,6 +1,6 @@
 ---
 title: "A Nonparametric Demand Analysis"
-subtitle: "Recovering elasticities with nonparametric regression"
+subtitle: "Recovering elasticities using nonparametric regression"
 author: "Matthew Aaron Looney"
 date: "08/22/2017"
 output:
@@ -31,13 +31,13 @@ fontsize: 12pt
 geometry: margin = 1.25in
 ---
 
-\AddToShipoutPictureFG{
-  \AtPageCenter{% or \AtTextCenter
-    \makebox[0pt]{\rotatebox[origin=c]{45}{%
-      \scalebox{5}{\texttransparent{0.05}{DRAFT}}%
-    }}
-  }
-}
+<!-- \AddToShipoutPictureFG{ -->
+<!--   \AtPageCenter{% or \AtTextCenter -->
+<!--     \makebox[0pt]{\rotatebox[origin=c]{45}{% -->
+<!--       \scalebox{5}{\texttransparent{0.05}{DRAFT}}% -->
+<!--     }} -->
+<!--   } -->
+<!-- } -->
 
 ```{r House Keeping, echo=FALSE, message=FALSE, cache=T}
 
@@ -390,7 +390,7 @@ AIDS_elas_M_income_constraint_t_sig_wr2 <- cbind(AIDS_elas_M_income_constraint_t
   
 # Introduction
   
-Empirical demand analysis has been dominated by the use of parametric functional form models since the appearance of the Working-Lesser Model in the 1940's [@Working:1943wb] [@Leser:1963vd]. A 2015 paper by Clements and Gao [@Clements:2015wj] provide a citation count of journal articles related to four popular parametric demand models (Linear Expenditure, Rotterdam, Translog and Almost Ideal Demand). The authors considered multiple time periods over the date range of 1974-2013. Their results clearly show an upward trajectory for all four parametric demand models with the Linear Expenditure and Almost Ideal Demand (AIDS) models having the highest citation counts, both in the multiple thousands of citations. This result suggests that parametric demand modeling is still very much a hotly researched area.  
+Empirical demand analysis has been dominated by the use of parametric functional form models since the appearance of the Working-Lesser Model in the 1940's [@Working:1943wb], [@Leser:1963vd]. A 2015 paper by Clements and Gao [-@Clements:2015wj] provide a citation count of journal articles related to four popular parametric demand models (Linear Expenditure, Rotterdam, Translog and Almost Ideal Demand). The authors considered multiple time periods over the date range of 1974-2013. Their results clearly show an upward trajectory for all four parametric demand models with the Linear Expenditure and Almost Ideal Demand (AIDS) models having the highest citation counts, both in the multiple thousands of citations. This result suggests that parametric demand modeling is still very much a hotly researched area.  
   
 While parametric form models have clearly dominated the research landscape there are other empirical techniques available to evaluate consumer expenditure data sets. The goal of empirical demand analysis is to answer basic questions about consumer behavior and in many cases, use these answers to design and implement policy (government) or improve some aspect of business design to increase market exposure/profits (private industry). Beyond these practical objectives Hal Varian [@Varian:1982wa] suggests that, given a consumers expenditure data set the demand analyst should ask four basic questions concerning the consumers behavior,  
   
@@ -402,21 +402,21 @@ While parametric form models have clearly dominated the research landscape there
   
 With these goals in mind economists are constantly refining their tools to improve their estimates of consumer behavior.  
   
-Nonparametric economic analysis has been a growing field of study over the past several decades. Many new techniques have been developed within a theoretical framework. However, despite the rapid growth of theoretical results, nonparametric applied research has lagged considerably. This may be due in part to the advanced mathematical and statistical exposition presented in many nonparametric research papers. It is often difficult for economist, while well trained in advanced mathematical techniques, to fully grasp the significance and translate from purely theoretical results into applied research. Theoretical researchers working within the field of mathematics and statistics often fail to consider applied economic problems and applied economist are not exploring these newly developed theoretical techniques and refining the theory once they have touched real world data. In addition, until recently, nonparametric techniques were substantially more computationally intensive compared to their parametric counterparts. While the previous statement would seem to imply that nonparametric techniques have now become computationally less intensive, in reality it is our computer hardware and programming techniques which have improved to the point where nonparametric analysis has become a viable alternative, especially where parametric techniques fall short. These improvements in computer hardware have effectively opened an area of research which, until recently, had remained closed.  
+Nonparametric economic analysis has been a growing field of study over the past several decades. Many new techniques have been developed within a theoretical framework. However, despite the rapid growth of theoretical results, nonparametric applied research has lagged considerably. This may be due in part to the advanced mathematical and statistical exposition presented in many nonparametric research papers. It is often difficult for economist, while well trained in advanced mathematical techniques, to fully grasp the significance and translate from purely theoretical results into applied research. Theoretical researchers working within the field of mathematics and statistics often fail to consider applied economic problems and applied economist are not seizing control of these newly developed theoretical techniques and refining the theory once they have touched real world data. In addition, until recently, nonparametric techniques were substantially more computationally intensive compared to their parametric counterparts. While the previous statement would seem to imply that nonparametric techniques have now become computationally less intensive, in reality it is our computer hardware and programming techniques which have improved to the point where nonparametric analysis has become a viable alternative, especially where parametric techniques fall short. These improvements in computer hardware have effectively opened an area of research which, until recently, had remained closed.  
   
-Regression analysis is the workhorse technique employed in econometrics. However, in linear regression it is assumed the regressors enter the conditional mean in a linear fashion and each regressor is independent of the other which is often a violation of the data under study. Even when we use nonlinear regression techniques we often still assume we know the functional form for the data generating process (DGP).  
+Regression analysis is the workhorse technique employed in econometrics. However, in ordinary linear regression it is assumed the regressors enter the conditional mean in a linear fashion and further, each regressor is independent of the other which is often a violation of the data under study. Even when nonlinear regression techniques are deployed, we often still assume we know the functional form for the data generating process (DGP).  
   
-The single largest potential issue with using a parametric form model to evaluate consumer demand is the prior imposition of functional form on the demand model. If a demand system is well represented by a functional form and the econometric model is correctly specified with theoretical assumptions met then a parametric estimator is both consistent and efficient. In fact if the previous criteria are met parametric regression is superior in just about every way. However, these requirements are excessively difficult to satisfy when used in the wild to gain insight about real world data and thus the parametric approach can be seriously flawed and worst, can lead the researcher to faulty conclusions which can have serious repercussions if used to implement policy.  
+The single largest potential issue with using a parametric form model to evaluate consumer demand is the prior imposition of functional form on the demand model. If a demand system is well represented by a functional form and the econometric model is correctly specified with all theoretical assumptions met, then a parametric estimator is both consistent and efficient. In fact if the previous criteria are met, parametric regression is superior in just about every way. However, these requirements are extremely difficult to satisfy when used in the wild on real world data and thus the parametric approach can be seriously flawed, and worst can lead the researcher to incorrect conclusions which can have serious repercussions if used to implement policy.  
   
-Nonparametric modelling affords many advantages over their parametric counterparts. Primary among them is the nonparametric models ability to help us uncover a more accurate representation of the unknown function, conditioned on the actual data in hand. In section 2 I will explore the methods and models used to estimate a nonparametric regression. In nonparametric analysis a critical step in achieving a reliable kernel estimator is choosing the correct bandwidth estimator. Some time will be spend exploring several different bandwidth estimators which are prominent in the current literature. I will also explore the two most popular kernel regression methods in current use, Local-Constant Least Squares (LCLS) and Local-Linear Least Squares (LLLS). I will summarize the data and quickly review the parametric models being used for comparison purposes. Section 3 explores the results obtained from the nonparametric kernel regression and compares these results with the parametric form models used on the same data set. Section 4 concludes and details direction for additional studies.  
+Nonparametric modelling affords many advantages over their parametric counterparts. Primary among them is the nonparametric models ability to help uncover a more accurate representation of the unknown function, conditioned on the actual data in hand. Section 2 will explore the models and methods used to estimate a nonparametric regression. In nonparametric analysis a critical step toward achieving a reliable kernel estimator is choosing the correct bandwidth estimator. Some time will be spent exploring different bandwidth estimators which are prominent in the current literature. We also explore the two most popular kernel regression methods in current use, Local-Constant Least Squares (LCLS) and Local-Linear Least Squares (LLLS). We will summarize the data and quickly review the parametric models being used for comparison purposes. Section 3 explores the results obtained from the nonparametric kernel regression and compares these results with the parametric form models used, Log-Log demand and the Almost Ideal Demand System. Section 4 concludes and explores direction for additional studies.  
 
 # Models, Methods, and Data  
   
-In this paper we seek to explore the validity of using nonparametric techniques to uncover estimates of demand elasticities. To this end we use the Log-Log demand system developed by Working [-@Working:1943wb] and Lesser [-@Leser:1963vd]. The benefit of using this type of parametric form is the sheer simplicity of the model. This simplicity allows us to easily compare the effectiveness of our nonparametric econometric technique without getting bogged down in complicated estimation considerations or theory constraints. The only theory constraints available to the Log-Log demand model is homogeneity of degree zero in prices and income. However, even though this constraint is available to the Log-Log model we decide to forego all economic theory constraints to make comparability more consistent.  
+In this paper we seek to explore the validity of using nonparametric techniques to uncover estimates of demand elasticities. To this end we use the Log-Log demand system developed by Working [-@Working:1943wb] and Lesser [-@Leser:1963vd]. The benefit of using this type of parametric form is the sheer simplicity of the model. This simplicity allows us to easily compare the effectiveness of our nonparametric econometric technique without getting bogged down in complicated estimation considerations or theory constraints. The only theory constraints available to the Log-Log demand model is homogeneity of degree zero in prices and income. However, even though this constraint is available to the Log-Log model we decide to forego all economic theory constraints to make comparability across models more consistent.  
   
 ## Log-Log Demand Model  
   
-Equation 1 shows the Log-Log model specification for the Marshallian own and cross prices elasticities ($e_{ik}$) and the income elasticities ($e_i$). Since we are unable to impose cross equation constraints our study will focus on the own price and income elasticities of this model. While the Hicksian elasticities are of more interest for policy and welfare studies, we focus only on the Marshallian estimates so a direct estimate comparison can be made between the parametric and nonparametric elasticity.  
+Equation 1 shows the Log-Log model specification for the Marshallian own and cross prices elasticities ($e_{ik}$) and the income elasticities ($e_i$). Since we are unable to impose cross equation constraints our study will focus on the own price and income elasticities of this model. While the Hicksian elasticities are of more interest for policy and welfare studies, we focus only on the Marshallian estimates so a direct estimate comparison can be made between the parametric and nonparametric elasticities.  
   
 \begin{equation} \label{marshal_unrestricted}
 \log ({q_i}) = {\alpha _i} + {e_i}\log (x) + \sum\limits_{k = 1}^n {{e_{ik}}\log ({p_k})} 
@@ -474,7 +474,7 @@ ${\hat J_n} = n{({\hat h_1},...,{\hat h_q})^{1/2}}{\hat I_n}{\hat \Omega ^{ - 1/
   
 According to the authors, it can be easily shown that the $\hat J_n$ test statistic diverges to $+ \infty$ if $H_0$ is false.  
   
-## Bandwidth Selection models  
+## Bandwidth Selection Models  
   
 The importance of proper bandwidth selection in nonparametric analysis is reviewed here. However, for a more detailed discussion of the methods and theory used in this paper see the excellent work by the following authors: Cheng et al.[-@Cheng:1997vy], Hall et al.[-@Hall:2007vq], Hurvich et al.[-@Hurvich:1998wi], Li and Racine[-@li2007nonparametric], Racine and Li[-@Racine:2004tua], and Li and Racine[-@Li:2004tn].  
   
@@ -578,17 +578,15 @@ $$K({\text{x}}) = \left[ {\begin{array}{*{20}{c}}
   0&0&0&{{K_h}({{\text{x}}_n}{\text{,x}})} 
 \end{array}} \right]$$
   
-One of the problems with the LCLS estimator is that it is bias. This may not be of concern depending on the circumstances but it should be noted.
-
-
-
+One of the problems with the LCLS estimator is that it is bias. This may not be of concern depending on the circumstances but it should be noted.  
+  
 ### Local-Linear Least Squares (LLLS)  
   
-The LLLS estimator has been growing in popularity as an alternative to the LCLS method. In addition to increasing use in applied research the LLLS estimator has been dominated the theoretical literature.  
+The LLLS estimator has been growing in popularity as an alternative to the LCLS method. In addition to increased use in applied research the LLLS estimator has gained a dominate position in the theoretical literature.  
   
 Conceptually, the LLLS estimator is similar to the LCLS with the exception that instead of fitting a constant to our left hand side variable we now consider fitting a locally defined line segment. This allows us to more accurately model the data and is especially useful when we have outliers and nonlinear relationships in our data.  
   
-We can think of our local-linear fitting as a local Taylor Series expansion at some point \textbf{x}. In other words, for the relationship $y=m(x)+u$, we have paired data on $(y_1,x_1), (y_2,x_2), ..., (y_n,x_n)$. This allows us to take a local Taylor approximation for each of the points \textbf{x}. It now become clear, with locally fitting with kernel weighting, problematic data (outliers, nonlinearity) can be better modeled by LLLS.  
+We can think of our local-linear fitting as a local Taylor Series expansion at some point \textbf{x}. In other words, for the relationship $y=m(x)+u$, we have paired data on $(y_1,x_1), (y_2,x_2), ..., (y_n,x_n)$. This allows us to take a local Taylor approximation for each of the points \textbf{x}. It now become clear that locally fitting a line segment with kernel weighting allows us to better deal with problematic data (outliers, nonlinearity).  
   
 The LLLS estimator as developed and defined by Li and Racine [-@Li:2004tn] is given as follows:  
   
